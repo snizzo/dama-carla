@@ -29,6 +29,21 @@ int CreaSocket(int Porta)
 	return sock;
 }
 
+void SpedisciMessaggio(int sock, char* Messaggio)
+{
+	//printf("Client: %s\n",Messaggio);
+	//Si puo' notare il semplice utilizzo di write: 
+	//write(socket, messaggio, lunghezza messaggio)
+	if (write(sock,Messaggio,strlen(Messaggio))<0)
+	{
+		printf("Impossibile mandare il messaggio.\n");
+		ChiudiSocket(sock);
+		exit(1);
+	}
+	printf("Pong sent back to connected client\n");
+	return;
+}
+
 void ChiudiSocket(int sock)
 {
 	close(sock);
@@ -39,12 +54,11 @@ int main()
 {
 	//N.B. L'esempio non usa la funzione fork per far vedere l'utilizzo di
 	//     socket non bloccanti
-
 	char  buffer[512];
 	int DescrittoreSocket,NuovoSocket;
 	int exitCond=0;
 	int Quanti;
-
+	
 	DescrittoreSocket=CreaSocket(1745);
 	printf("Server: Attendo connessioni...\n");
 	while (!exitCond)
@@ -61,20 +75,18 @@ int main()
 			}
 			else
 			{
-				 //Aggiusto la lunghezza...
-				 buffer[Quanti]=0;
-				 //Elaborazione dati ricevuti
-				 
-				 //"exit" case
+				//Aggiusto la lunghezza...
+				buffer[Quanti]=0;
+				//Elaborazione dati ricevuti
+				
+				//"exit" case
 				if (strcmp(buffer,"exit")==0){
 					exitCond=1;
 				}
 				 
 				if (strcmp(buffer,"ping")==0){
-					printf("pong");
+					SpedisciMessaggio(NuovoSocket,"pong");
 				}
-				 
-				printf("Server: %s \n",buffer);
 			}
 			//Chiusura del socket temporaneo
 			ChiudiSocket(NuovoSocket);

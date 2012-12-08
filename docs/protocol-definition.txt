@@ -1,0 +1,96 @@
+Reference:
+CtS -> Client to Server
+StC -> Server to Client
+
+------------------------------------------------------------------------
+
+CtS:
+	REGISTER <nickname> <password> <email>
+	
+StC:
+	SUCCESS
+	FAILED <errcode>
+
+Errcodes:
+	001: <nickname> has already been registered.
+	002: <password> is too easy to catch.
+	003: <email> has already been registered.
+	
+Notes:
+	Once registered, the server will try to send a mail to the <email> address. In case
+	it's received from the client he should manually enter the activation code in the
+	client interface.
+	
+------------------------------------------------------------------------
+
+CtS:
+	ACTIVATE <nickname> <secretid>
+	
+StC:
+	SUCCESS
+	FAILED <errcode>
+
+Errcodes:
+	001: <secretid> is not valid. Check twice your emails.
+	002: <nickname> is not registered. Register it first.
+
+------------------------------------------------------------------------
+
+CtS:
+	LOGIN <nickname> <password>
+	
+StC:
+	SUCCESS
+	FAILED <errcode>
+
+Errcodes:
+	001: <nickname> is not valid.
+	002: <password> is not correct.
+------------------------------------------------------------------------
+	
+CtS:
+	LOGOUT
+	
+StC:
+	SUCCESS
+	FAILED <errcode>
+
+Errcodes:
+	001: No one was logged.
+	
+------------------------------------------------------------------------
+	
+CtS:
+	JOIN QUEUE
+	
+StC:
+	SUCCESS <currentpos>
+	FAILED <errcode>
+
+Errcodes:
+	001: Could'n join queue for unknown reasons.
+------------------------------------------------------------------------
+	
+CtS:
+	LEAVE QUEUE
+	
+StC:
+	SUCCESS
+	FAILED <errcode>
+
+Errcodes:
+	001: You were not in queue.
+	
+------------------------------------------------------------------------
+	
+CtS:
+	JOIN GAME
+	
+StC:
+	SUCCESS
+	FAILED <errcode>
+
+Errcodes:
+	001: Can't join for unknown reasons.
+	002: You weren't in a game queue.
+------------------------------------------------------------------------

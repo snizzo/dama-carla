@@ -53,7 +53,11 @@ void SpedisciMessaggio(int sock, char* Messaggio)
 
 int main(int argc,char* argv[])
 {
-	int DescrittoreSocket;
+	char  buffer[512];
+	int DescrittoreSocket,NuovoSocket;
+	int exitCond=0;
+	int Quanti;
+	
 	
 	//Creo e connetto il socket
 	DescrittoreSocket=CreaSocket(argv[1],atoi(argv[2]));
@@ -63,7 +67,21 @@ int main(int argc,char* argv[])
 		SpedisciMessaggio(DescrittoreSocket,"exit");
 	else
 		SpedisciMessaggio(DescrittoreSocket,argv[3]);
-
+	
+	while (!exitCond)
+	{
+		//Lettura dei dati dal socket (messaggio ricevuto)
+		if ((Quanti=read(DescrittoreSocket,buffer,sizeof(buffer)))>0)
+		{
+			//Aggiusto la lunghezza...
+			buffer[Quanti]=0;
+			//Elaborazione dati ricevuti
+			
+			printf("Server response: %s \n", buffer);
+			exitCond = 1;
+		}
+	}
+	
 	//Chiudo il socket.
 	ChiudiSocket(DescrittoreSocket);
 

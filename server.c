@@ -13,48 +13,31 @@
 
 int main()
 {
-	//N.B. L'esempio non usa la funzione fork per far vedere l'utilizzo di
-	//     socket non bloccanti
-	char  buffer[512];
-    int socketDescriptor, newSocket;
-	int exitCond=0;
-    int howMany;
-	
-    socketDescriptor=createServerSocket(1745);
-	printf("Server: Attendo connessioni...\n");
-	while (!exitCond)
-	{
-		//Test sul socket: accept non blocca, ma il ciclo while continua
-		//l'esecuzione fino all'arrivo di una connessione.
-        if ((newSocket=accept(socketDescriptor,0,0))!=-1)
-		{
-			//Lettura dei dati dal socket (messaggio ricevuto)
-            if ((howMany=read(newSocket,buffer,sizeof(buffer)))<0)
-			{
-				 printf("Impossibile leggere il messaggio.\n");
-                 closeMessage(newSocket);
-			}
-			else
-			{
-				//Aggiusto la lunghezza...
-                buffer[howMany]=0;
-				//Elaborazione dati ricevuti
-				
-				//"exit" case
-				if (strcmp(buffer,"exit")==0){
-					exitCond=1;
-				}
 
-				if (strcmp(buffer,"ping")==0){
-                    sendMessage(newSocket,"pong");
-				}
-			}
-			//Chiusura del socket temporaneo
-            closeMessage(newSocket);
-		}
-	}
+    struct serverinfo info;
+
+    initiateServerNetwork(&info.net, 1745);
+
+    //accepting and managing events
+    while(1){
+        if (acceptServerMessage(&info.net)){
+            //single ping alive command
+            if(strcmp(info.net.buffer,"ping")==0){
+                sendMessage(info.net.newSocket, "pong");
+            }
+
+            //remote shutdown command
+            if(strcmp(info.net.buffer,"exit")==0){
+                return 0;
+            }
+            //Chiusura del socket temporaneo
+            close(info.net.newSocket);
+        }
+
+    }
+
 	//Chiusura del socket
-    closeMessage(socketDescriptor);
+    closeNetwork(&info.net);
     printf("Server quitting...\n");
 
 	return 0;

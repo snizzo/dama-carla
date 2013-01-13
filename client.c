@@ -21,8 +21,8 @@ int main(int argc,char* argv[])
 	
     printf("DEBUG: server reply: %s \n", info.net.buffer);
 
-	//Chiudo il socket.
-    closeMessage(info.net.socketDescriptor);
+    //close socket
+    closeNetwork(&info.net);
 
 	return 0;
 }

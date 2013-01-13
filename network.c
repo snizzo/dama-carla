@@ -25,10 +25,10 @@ void initiateNetwork(struct networkinfo *net, char *addr, int port)
     net->exitCond = 0;
 }
 
-void closeMessage(int sock)
+void initiateServerNetwork(struct networkinfo *net, int port)
 {
-    close(sock);
-    return;
+    net->socketDescriptor = createServerSocket(port);
+    net->exitCond = 0;
 }
 
 int createSocket(char* destination, int port)
@@ -88,7 +88,7 @@ void sendMessage(int sock, char* message)
     if (write(sock,message,strlen(message))<0)
     {
         printf("ERROR: Unable to send the message.\n");
-        closeMessage(sock);
+        close(sock);
         exit(1);
     }
     return;
@@ -112,4 +112,37 @@ void sendMessageAndWaitReply(struct networkinfo *net, char *message)
             net->exitCond = 1;
         }
     }
+}
+
+/*
+ * Interface for accepting server events
+ */
+int acceptServerMessage(struct networkinfo *net)
+{
+        //Test sul socket: accept non blocca, ma il ciclo while continua
+        //l'esecuzione fino all'arrivo di una connessione.
+        if ((net->newSocket=accept(net->socketDescriptor,0,0))!=-1)
+        {
+            //Lettura dei dati dal socket (messaggio ricevuto)
+            if ((net->howMany=read(net->newSocket,net->buffer,sizeof(net->buffer)))<0)
+            {
+                 printf("Impossibile leggere il messaggio.\n");
+                 close(net->newSocket);
+            }
+            else
+            {
+                //Aggiusto la lunghezza...
+                net->buffer[net->howMany]=0;
+
+                return 1;
+
+            }
+            return 0;
+        }
+        return 0;
+}
+
+void closeNetwork(struct networkinfo *net)
+{
+    close(net->socketDescriptor);
 }

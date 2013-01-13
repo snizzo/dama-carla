@@ -1,12 +1,35 @@
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "network.h"
+
+void manageSecondParams(int argc, char *argv[]);
 
 int main(int argc,char* argv[])
 {
-    char buffer[512];
-    int socketDescriptor,newSocket;
-	int exitCond=0;
-    int howMany;
 
+    struct clientinfo info;
+
+    manageSecondParams(argc,argv);
+
+    initiateNetwork(&info.net,argv[1],atoi(argv[2]));
+    //opening socket
+    //info.net.socketDescriptor = createSocket(argv[1],atoi(argv[2]));
+
+    sendMessageAndWaitReply(&info.net, argv[3]);
+	
+    printf("DEBUG: server reply: %s \n", info.net.buffer);
+
+	//Chiudo il socket.
+    closeMessage(info.net.socketDescriptor);
+
+	return 0;
+}
+
+
+void manageSecondParams(int argc, char *argv[])
+{
     //checking if client was launched to print help
     if ( (argc==2) && (strcmp(argv[1],"--help")==0) ){
         printf("Usage: %s [ip address] [port] [command]\n\n", argv[0]);
@@ -14,33 +37,4 @@ int main(int argc,char* argv[])
         //close without errors
         exit(0);
     }
-	
-	//Creo e connetto il socket
-    socketDescriptor=createSocket(argv[1],atoi(argv[2]));
-	
-	//Spedisco il messaggio voluto
-    if ((argc==2)&&(strcmp(argv[3],"exit")==0)) {
-        sendMessage(socketDescriptor,"exit");
-    } else {
-        sendMessage(socketDescriptor,argv[3]);
-    }
-	
-	while (!exitCond)
-	{
-		//Lettura dei dati dal socket (messaggio ricevuto)
-        if ((howMany=read(socketDescriptor,buffer,sizeof(buffer)))>0)
-		{
-			//Aggiusto la lunghezza...
-            buffer[howMany]=0;
-			//Elaborazione dati ricevuti
-			
-			printf("Server response: %s \n", buffer);
-			exitCond = 1;
-		}
-	}
-	
-	//Chiudo il socket.
-    closeMessage(socketDescriptor);
-
-	return 0;
 }

@@ -1,13 +1,15 @@
 
+LIBSOURCES=network.c
+
 rebuild:
 	unlink server
 	unlink client
-	gcc -o server server.c
-	gcc -o client client.c
+	clang -o server server.c $(LIBSOURCES)
+	clang -o client client.c $(LIBSOURCES)
 
 build:
-	gcc -o server server.c
-	gcc -o client client.c network.c
+	clang -o server server.c $(LIBSOURCES)
+	clang -o client client.c $(LIBSOURCES)
 
 clean:
 	unlink server

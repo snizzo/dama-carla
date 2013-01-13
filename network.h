@@ -13,9 +13,18 @@ struct clientinfo{
     struct networkinfo net;
 };
 
+struct serverinfo{
+    struct networkinfo net;
+};
+
+
+void initiateServerNetwork(struct networkinfo *net, int port);
+
+int acceptServerMessage(struct networkinfo *net);
+
 void initiateNetwork(struct networkinfo *net, char *addr, int port);
 
-void closeMessage(int sock);
+void closeNetwork(struct networkinfo *net);
 
 int createSocket(char* destination, int port);
 

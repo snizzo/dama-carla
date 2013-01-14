@@ -1,5 +1,5 @@
 
-LIBSOURCES=network.c
+LIBSOURCES=network.c parser.c filesystem.c
 
 rebuild:
 	unlink server

@@ -82,7 +82,6 @@ int createServerSocket(int port)
 
 void sendMessage(int sock, char* message)
 {
-    printf("Client: %s\n",message);
     //Si puo' notare il semplice utilizzo di write:
     //write(socket, messaggio, lunghezza messaggio)
     if (write(sock,message,strlen(message))<0)

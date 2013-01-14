@@ -10,28 +10,49 @@
 #include <fcntl.h>
 
 #include "network.h"
+#include "filesystem.h"
+#include "parser.h"
 
 int main()
 {
 
     struct serverinfo info;
 
+    char * cmd;
+
     initiateServerNetwork(&info.net, 1745);
 
     //accepting and managing events
     while(1){
         if (acceptServerMessage(&info.net)){
+
+            cmd = strtok(info.net.buffer, " ");
+
             //single ping alive command
-            if(strcmp(info.net.buffer,"ping")==0){
-                sendMessage(info.net.newSocket, "pong");
+            if(strcmp(&cmd[0],"ping")==0){
+                cmd = strtok (NULL, " ");
+                printf("ci siamo\n");
+                if(cmd!=NULL){
+                    printf("non null\n");
+                    if(strcmp(&cmd[0],"one")==0){
+                        sendMessage(info.net.newSocket, "one received");
+                    }else if(strcmp(&cmd[0],"two")==0){
+                        sendMessage(info.net.newSocket, "two received");
+                    } else {
+                        sendMessage(info.net.newSocket, "needed a second parameter <param>");
+                    }
+                }
             }
 
             //remote shutdown command
-            if(strcmp(info.net.buffer,"exit")==0){
+            if(strcmp(&cmd[0],"exit")==0){
                 return 0;
             }
-            //Chiusura del socket temporaneo
+
+            //closing temporary socket
             close(info.net.newSocket);
+            //setting pointer to null
+            cmd = NULL;
         }
 
     }

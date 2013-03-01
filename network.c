@@ -1,15 +1,4 @@
-#include <unistd.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-//"in" per "sockaddr_in"
-#include <netinet/in.h>
-//"netdb" per "gethostbyname"
-#include <netdb.h>
-#include <fcntl.h>
-#include"network.h"
+#include "network.h"
 
 /*
  * Initialize the socket used for client/server communications.
@@ -53,6 +42,11 @@ int createSocket(char* destination, int port)
     //Connessione del socket. Esaminare errore per compiere azioni
     //opportune in caso di errore.
     errore=connect(sock, (struct sockaddr*) &temp, sizeof(temp));
+    if(errore<0){
+		printf("ERROR: connection to server refused.");
+		close(sock);
+		exit(1);
+	}
     return sock;
 }
 
@@ -69,7 +63,7 @@ int createServerSocket(int port)
     temp.sin_port=htons(port);
 
     //Il socket deve essere non bloccante
-    errore=fcntl(sock,F_SETFL,O_NONBLOCK);
+    errore=fcntl(sock,F_SETFL);
 
     //Bind del socket
     errore=bind(sock,(struct sockaddr*) &temp,sizeof(temp));
@@ -84,7 +78,9 @@ void sendMessage(int sock, char* message)
 {
     //Si puo' notare il semplice utilizzo di write:
     //write(socket, messaggio, lunghezza messaggio)
-    if (write(sock,message,strlen(message))<0)
+    ssize_t w = write(sock,message,500);
+    //printf("%d\n", w);
+    if (w<0)
     {
         printf("ERROR: Unable to send the message.\n");
         close(sock);
@@ -99,6 +95,7 @@ void sendMessage(int sock, char* message)
 void sendMessageAndWaitReply(struct networkinfo *net, char *message)
 {
     sendMessage(net->socketDescriptor,message);
+    //printf("diocane");
 
     //event retrival
     while (!net->exitCond)
@@ -107,7 +104,7 @@ void sendMessageAndWaitReply(struct networkinfo *net, char *message)
         if ((net->howMany=read(net->socketDescriptor,net->buffer,sizeof(net->buffer)))>0)
         {
             //Aggiusto la lunghezza...
-            net->buffer[net->howMany]=0;
+            net->buffer[net->howMany]='\0';
             net->exitCond = 1;
         }
     }
@@ -136,7 +133,6 @@ int acceptServerMessage(struct networkinfo *net)
                 return 1;
 
             }
-            return 0;
         }
         return 0;
 }

@@ -1,5 +1,16 @@
 #ifndef NETWORK_H
 #define NETWORK_H
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+//"in" per "sockaddr_in"
+#include <netinet/in.h>
+//"netdb" per "gethostbyname"
+#include <netdb.h>
+#include <fcntl.h>
 //here goes my header
 
 struct networkinfo{

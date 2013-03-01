@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "network.h"
+#include "dama.h"
 
 void manageSecondParams(int argc, char *argv[]);
 
@@ -16,10 +17,25 @@ int main(int argc,char* argv[])
     initiateNetwork(&info.net,argv[1],atoi(argv[2]));
     //opening socket
     //info.net.socketDescriptor = createSocket(argv[1],atoi(argv[2]));
-
-    sendMessageAndWaitReply(&info.net, argv[3]);
 	
-    printf("DEBUG: server reply: %s \n", info.net.buffer);
+	struct netmessage message;
+	strcpy(message.cmd1, "register");
+	strcpy(message.cmd2, "snizzo");
+	strcpy(message.cmd3, "maddaffacca");
+	
+	char * message_pointer = (char *) &message;
+	
+    sendMessageAndWaitReply(&info.net, message_pointer);
+    
+    printf("srv: %s \n", info.net.buffer);
+    
+	strcpy(message.cmd1, "register");
+	strcpy(message.cmd2, "maramao");
+	strcpy(message.cmd3, "merdacane");
+	
+    sendMessageAndWaitReply(&info.net, message_pointer);
+    
+    printf("srv: %s \n", info.net.buffer);
 
     //close socket
     closeNetwork(&info.net);

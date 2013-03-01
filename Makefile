@@ -1,15 +1,9 @@
 
-LIBSOURCES=network.c parser.c filesystem.c
-
-rebuild:
-	unlink server
-	unlink client
-	clang -o server server.c $(LIBSOURCES)
-	clang -o client client.c $(LIBSOURCES)
+LIBSOURCES=network.c filesystem.c serverevents.c
 
 build:
-	clang -o server server.c $(LIBSOURCES)
-	clang -o client client.c $(LIBSOURCES)
+	clang -o server -g server.c $(LIBSOURCES) -Wall --pedantic -O0
+	clang -o client -g client.c $(LIBSOURCES) -Wall --pedantic -O0
 
 clean:
 	unlink server

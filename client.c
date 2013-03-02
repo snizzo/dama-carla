@@ -49,8 +49,12 @@ void manageSecondParams(int argc, char *argv[])
     //checking if client was launched to print help
     if ( (argc==2) && (strcmp(argv[1],"--help")==0) ){
         printf("Usage: %s [ip address] [port] [command]\n\n", argv[0]);
-
-        //close without errors
-        exit(0);
+		
+	}
+    if ( (argc==2) && (strcmp(argv[1],"--credit")==0) ){
+        printf("Usage: small dama game made by voldemort and sauron\n\n");
     }
+    
+	//close without errors
+	exit(0);
 }

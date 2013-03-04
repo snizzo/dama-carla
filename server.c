@@ -51,7 +51,7 @@ int main()
         }
 
     }
-
+    
 	//Chiusura del socket
 	closeNetwork(&info.net);
 	printf("Server quitting...\n");

@@ -28,14 +28,6 @@ int main(int argc,char* argv[])
     sendMessageAndWaitReply(&info.net, message_pointer);
     
     printf("srv: %s \n", info.net.buffer);
-    
-	strcpy(message.cmd1, "register");
-	strcpy(message.cmd2, "maramao");
-	strcpy(message.cmd3, "merdacane");
-	
-    sendMessageAndWaitReply(&info.net, message_pointer);
-    
-    printf("srv: %s \n", info.net.buffer);
 
     //close socket
     closeNetwork(&info.net);

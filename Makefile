@@ -1,6 +1,8 @@
+LIBSOURCES=network_data.c
+CFLAGS=-g -Weverything
 build:
-	clang -o client client.c -Weverything
-	clang -o server server.c -Weverything
+	clang $(CFLAGS) -o client client.c $(LIBSOURCES)
+	clang $(CFLAGS) -o server server.c $(LIBSOURCES)
 
 clean:
 	rm client

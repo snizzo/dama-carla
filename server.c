@@ -41,8 +41,13 @@ int main()
 	{
 		int len = recv(consocket, buffer, sizeof(buffer), 0);
 		buffer[len] = '\0';
+		struct netmessage * m = (struct netmessage *) buffer;
 
-		printf("%s\n", buffer);
+		printf("%s\n", m->msg1);
+		printf("%s\n", m->msg2);
+		printf("%s\n", m->msg3);
+		printf("%s\n", m->msg4);
+		printf("%s\n", m->msg5);
 		
 		printf("Incoming connection from %s - sending welcome\n", inet_ntoa(dest.sin_addr));
 		send(consocket, msg, strlen(msg), 0); 

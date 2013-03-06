@@ -22,7 +22,9 @@ int main()
 	char * message = (char *) &msg;
 	*/
 	
-	char message[] = "test message";
+	struct netmessage m;
+	setNetMessage(&m, "ciao", "pippo", "bubu", "", "");
+	char * message = (char *) &m;
 	
 	char buffer[MAXRCVLEN + 1]; /* +1 so we can add null terminator */
 	int mysocket;
@@ -38,7 +40,7 @@ int main()
  
 	connect(mysocket, (struct sockaddr *)&dest, sizeof(struct sockaddr));
 	
-	if(send(mysocket, message, strlen(message), 0)<0){
+	if(send(mysocket, message, 250, 0)<0){
 		printf("error sending message\n");
 	}
 	

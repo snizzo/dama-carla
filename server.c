@@ -9,6 +9,7 @@
 
 //specific liib inclusion
 #include "network_data.h"
+#include "logic.h"
 
 #define PORTNUM 2343
  

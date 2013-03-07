@@ -1,4 +1,4 @@
-LIBSOURCES=network_data.c
+LIBSOURCES=network_data.c network.c
 CFLAGS=-g -Weverything
 all:
 	clang $(CFLAGS) -o client client.c $(LIBSOURCES)

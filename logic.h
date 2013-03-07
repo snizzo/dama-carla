@@ -5,6 +5,8 @@
 #ifndef LOGIC_H
 #define LOGIC_H
 
+#include <stdio.h>
+
 
 //data board values:
 //	'e'	: empty

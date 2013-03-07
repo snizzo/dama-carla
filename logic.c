@@ -7,7 +7,7 @@
 #include "logic.h"
 
 /*
- * This main will be ripped of in the future.
+ * This main will be ripped off in the future.
  */
 int main()
 {

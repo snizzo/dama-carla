@@ -9,6 +9,7 @@
 
 //specific liib inclusion
 #include "network_data.h"
+#include "network.h"
  
 #define MAXRCVLEN 500
 #define PORTNUM 2343

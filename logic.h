@@ -5,4 +5,18 @@
 #ifndef LOGIC_H
 #define LOGIC_H
 
+
+//data board values:
+//	'e'	: empty
+//	'wc': white checker (pedina)
+//	'bc': black checker (pedina)
+//	'wd': white dama
+//	'bd': black dama
+struct board{
+	char data[8][8];
+};
+
+void printBoard( struct board * b );
+void setAllBoardEmpty(struct board * b);
+
 #endif

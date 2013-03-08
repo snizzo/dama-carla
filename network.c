@@ -1,3 +1,24 @@
+/*
+   CLIENT LIB USAGE:
+   
+   This network is structured as a call-response system. This means you have
+   to query server with a netmessage like this:
+  
+   struct netmessage message;
+	setNetMessage(&message, "register", "snizzo", "mypwd", "", "");
+	
+	sendClientMessage(&net, &message);
+   
+   then, you have to instantly call the read message function like this:
+   
+   struct netmessage * incoming = readClientMessage(&net);
+   
+   and you will have all the message mapped to incoming netmessage. 
+   
+   
+   
+ */
+
 #include "network.h"
 
 #define PORTNUM 2343

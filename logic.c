@@ -6,6 +6,7 @@
 
 #include "logic.h"
 
+
 /*
  * This main will be ripped off in the future.
  */
@@ -20,6 +21,8 @@ int main()
 	
 	printf("done!\n");
 	
+	printBoard(&b);
+	
 	return 0;
 }
 
@@ -27,7 +30,14 @@ int main()
  * Print internal data board.
  */
 void printBoard( struct board * b )
-{
+{	
+	for (int i=0;i<8;i++){
+		for (int j=0;j<8;j++){
+			printf ("%i", b->data[i][j]);
+		}
+		printf ("\n");
+	}
+	
 	// TODO: complete function that prints board
 	// mainly for debug purposes
 }
@@ -39,7 +49,7 @@ void setAllBoardEmpty( struct board * b )
 {	
 	for (int i=0;i<8;i++){
 		for (int j=0;j<8;j++){
-			b->data[i][j] = 'e';
+			b->data[i][j] = 1;
 		}
 	}
 }

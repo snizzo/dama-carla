@@ -9,13 +9,13 @@
 
 
 //data board values:
-//	'e'	: empty
-//	'wc': white checker (pedina)
-//	'bc': black checker (pedina)
-//	'wd': white dama
-//	'bd': black dama
+//	e	: empty
+//	w   : white checker (pedina)
+//	b   : black checker (pedina)
+//	W   : white dama
+//	B   : black dama
 struct board{
-	char data[8][8];
+	int data[8][8];
 };
 
 void printBoard( struct board * b );

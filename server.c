@@ -1,11 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
 
 //specific lib inclusion
 #include "network_data.h"
@@ -22,18 +16,16 @@ int main()
 	{
 		struct netmessage * message = readServerMessage(&net);
 		
+		
+		
 		printf("%s\n", message->msg1);
-		printf("%s\n", message->msg2);
-		printf("%s\n", message->msg3);
-		printf("%s\n", message->msg4);
-		printf("%s\n", message->msg5);
 		
 		printf("Incoming connection.\n");
 		
-		struct netmessage m;
-		setNetMessage(&m, "risp", "rispostella", "rispostuzz", "", "rispostinax");
+		struct netmessage response;
+		setNetMessage(&response, "risp", "rispostella", "rispostuzz", "", "rispostinax");
 		
-		sendServerMessage(&net, &m);
+		sendServerMessage(&net, &response);
 	}
 	
 	closeServerNetwork(&net);

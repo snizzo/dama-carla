@@ -21,10 +21,21 @@ struct server_network{
 };
 
 
-//function prototypes of network.c
+struct client_network{
+	struct sockaddr_in dest;
+	int mysocket;
+	char buffer[300]; /* +1 so we can add null terminator */
+};
+
+//CLIENT
+void openClientNetwork(struct client_network * net);
+void sendClientMessage(struct client_network * net, struct netmessage * message);
+struct netmessage * readClientMessage(struct client_network * net);
+
+//function prototypes of network.c SERVER
 void openServerNetwork(struct server_network * net);
 struct netmessage * readServerMessage(struct server_network * net);
-void sendServerMessage(struct server_network * net, char * message);
+void sendServerMessage(struct server_network * net, struct netmessage * message);
 void closeServerNetwork(struct server_network * net);
 
 #endif

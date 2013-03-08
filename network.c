@@ -1,6 +1,7 @@
 #include "network.h"
 
 #define PORTNUM 2343
+#define TARGET_IP "127.0.0.1"
 
 /*
  * Initiate a server netowork, listening for clients in PORTNUM
@@ -41,9 +42,10 @@ struct netmessage * readServerMessage(struct server_network * net)
 /*
  * Send a message over the network to a client
  */
-void sendServerMessage(struct server_network * net, char * message)
+void sendServerMessage(struct server_network * net, struct netmessage * message)
 {
-	send(net->incoming, message, strlen(message), 0); 
+	char * c = (char *) message;
+	send(net->incoming, c, 250, 0); 
 	net->incoming = accept(net->mysocket, (struct sockaddr *)&net->dest, &net->socksize);
 }
 
@@ -56,3 +58,46 @@ void closeServerNetwork(struct server_network * net)
 	close(net->mysocket);
 }
 
+//client ----------------------------------------------------------------------
+
+/*
+ * Set up a client network environment.
+ */
+void openClientNetwork(struct client_network * net) {
+	net->mysocket = socket(AF_INET, SOCK_STREAM, 0);
+ 
+	memset(&net->dest, 0, sizeof(net->dest));                /* zero the struct */
+	net->dest.sin_family = AF_INET;
+	net->dest.sin_addr.s_addr = inet_addr(TARGET_IP); /* set destination IP number */
+	net->dest.sin_port = htons(PORTNUM);                /* set destination port number */
+ 
+	connect(net->mysocket, (struct sockaddr *)&net->dest, sizeof(struct sockaddr));
+}
+
+/*
+ * send a struct netmessage from client to server
+ */
+void sendClientMessage(struct client_network * net, struct netmessage * message)
+{
+	openClientNetwork(net);
+	
+	char * decoded_message = (char *) message;
+	if(send(net->mysocket, decoded_message, 250, 0)<0){
+		printf("error sending message!\n");
+	}
+}
+
+/*
+ * read a message from server to client
+ */
+struct netmessage * readClientMessage(struct client_network * net)
+{
+	long len = recv(net->mysocket, net->buffer, sizeof(net->buffer), 0);
+ 
+	/* We have to null terminate the received data ourselves */
+	net->buffer[len] = '\0';
+	
+	close(net->mysocket); //close client network part
+	
+	return (struct netmessage *) net->buffer;
+}

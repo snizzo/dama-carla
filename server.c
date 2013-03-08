@@ -7,7 +7,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-//specific liib inclusion
+//specific lib inclusion
 #include "network_data.h"
 #include "network.h"
 
@@ -30,7 +30,10 @@ int main()
 		
 		printf("Incoming connection.\n");
 		
-		sendServerMessage(&net, "barabba e strafiquo :)");
+		struct netmessage m;
+		setNetMessage(&m, "risp", "rispostella", "rispostuzz", "", "rispostinax");
+		
+		sendServerMessage(&net, &m);
 	}
 	
 	closeServerNetwork(&net);

@@ -9,16 +9,18 @@
 
 
 //data board values:
-//	e	: empty
-//	w   : white checker (pedina)
-//	b   : black checker (pedina)
-//	W   : white dama
-//	B   : black dama
+//	0	: empty
+//	1   : white checker (pedina)
+//	3   : black checker (pedina)
+//	2   : white dama
+//	4   : black dama
 struct board{
 	int data[8][8];
 };
 
+int nextMove( struct board * b, int i, int j, int k, int l, int m );
+void prepareBoard( struct board * b );
 void printBoard( struct board * b );
-void setAllBoardEmpty(struct board * b);
+void setAllBoardEmpty( struct board * b );
 
 #endif

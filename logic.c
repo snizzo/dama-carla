@@ -76,16 +76,18 @@ int nextMove( struct board * b, int i, int j, int k, int l, int m ) //i,j: coord
 			} else if (b->data[i-1][j+1]==0 && (k==i+1 || l==j+1)) {		//bianco muove a destra
 				b->data[i][j] = 0;
 				b->data[i-1][j+1] = 1;
-			}
+			} else if (b->data[i-2][j-2]==0 && (k==i-2) && (l==j-2) && (b->data[i-1][j-1]
 		}
 	}
 }
+
+void move ( struct board * b, int i, int j, int k, int l )
 
 /*
  * Print internal data board.
  */
 void printBoard( struct board * b )
-{	
+{	 
 	for (int i=0;i<8;i++){
 		for (int j=0;j<8;j++){
 			printf ("%i", b->data[i][j]);

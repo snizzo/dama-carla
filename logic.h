@@ -22,5 +22,8 @@ int nextMove( struct board * b, int i, int j, int k, int l, int m );
 void prepareBoard( struct board * b );
 void printBoard( struct board * b );
 void setAllBoardEmpty( struct board * b );
+int canMove ( struct board * b, int m);
+int canMoveWhite( struct board * b, int i, int j );
+int canMoveBlack( struct board * b, int i, int j );
 
 #endif

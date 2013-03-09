@@ -23,9 +23,14 @@ void prepareBoard( struct board * b );
 void printBoard( struct board * b );
 void setAllBoardEmpty( struct board * b );
 int canMove ( struct board * b, int m);
-int canMoveWhite( struct board * b, int i, int j );
-int canMoveBlack( struct board * b, int i, int j );
-int canMoveWking( struct board * b, int i, int j );
-int canMoveBking( struct board * b, int i, int j );
+int canWhiteMove( struct board * b, int i, int j );
+int canWhiteCapt( struct board * b, int i, int j );
+int canBlackMove( struct board * b, int i, int j );
+int canBlackCapt( struct board * b, int i, int j );
+int canWkingMove( struct board * b, int i, int j );
+int canWkingCapt( struct board * b, int i, int j );
+int canBkingMove( struct board * b, int i, int j );
+int canBkingCapt( struct board * b, int i, int j );
+
 
 #endif

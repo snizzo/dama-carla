@@ -77,11 +77,11 @@ int canMove ( struct board * b, int m)
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
 				if (b->data[i][j]==1) {
-					if (canMoveWhite(b, i, j)==1) {
+					if ((canWhiteMove(b, i, j)==1) || (canWhiteCapt(b, i, j)==1)) {
 						c++;
 					}
 				} else if (b->data[i][j]==2) {
-					if (canMoveWking(b, i ,j)==1) {
+					if ((canWkingMove(b, i ,j)==1) || (canWkingCapt(b, i ,j)==1)) {
 						c++;
 					}
 				}
@@ -93,11 +93,11 @@ int canMove ( struct board * b, int m)
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
 				if (b->data[i][j]==3) {
-					if (canMoveBlack(b, i, j)==1) {
+					if ((canBlackMove(b, i, j)==1) || (canBlackCapt(b, i, j)==1)) {
 						c++;
 					}
 				} else if (b->data[i][j]==4) {
-					if (canMoveBking(b, i ,j)==1) {
+					if ((canBkingMove(b, i ,j)==1) || (canBkingCapt(b, i ,j)==1)) {
 						c++;
 					}
 				}
@@ -113,134 +113,258 @@ int canMove ( struct board * b, int m)
 			}
 }
 
-int canMoveWhite( struct board * b, int i, int j )				//può la pedina bianca muovere?
+int canWhiteMove( struct board * b, int i, int j )				//può la pedina bianca muovere?
 {
 	if (j==0) {
-		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
+		if (b->data[i-1][j+1]==0) {
 			return 1;
 		}
 	} else if (j==7) {
-		if (b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+		if (b->data[i-1][j-1]==0) {
 			return 1;
 		}
 	} else {
-		if (b->data[i-1][j-1]==0 || b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+		if (b->data[i-1][j-1]==0 || b->data[i-1][j+1]==0) {
 			return 1;
 		}
 	}
+	return -1;
 }
 
-int canMoveBlack( struct board * b, int i, int j )				//può la pedina nera muovere?
+int canWhiteCapt( struct board * b, int i, int j)						//può la pedina bianca mangiare?
 {
 	if (j==0) {
-		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0)) {
+		if ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) {
 			return 1;
 		}
 	} else if (j==7) {
-		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+		if ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0) {
 			return 1;
 		}
 	} else {
-		if (b->data[i+1][j-1]==0 || b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+		if (((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
 			return 1;
 		}
 	}
+	return -1;
 }
 
-int canMoveWking( struct board * b, int i, int j )				//può la dama bianca muovere?
+int canBlackMove( struct board * b, int i, int j )				//può la pedina nera muovere?
+{
+	if (j==0) {
+		if (b->data[i+1][j+1]==0) {
+			return 1;
+		}
+	} else if (j==7) {
+		if (b->data[i+1][j-1]==0) {
+			return 1;
+		}
+	} else {
+		if (b->data[i+1][j-1]==0 || b->data[i+1][j+1]==0) {
+			return 1;
+		}
+	}
+	return -1;
+}
+
+int canBlackCapt( struct board * b, int i, int j)						//può la pedina nera mangiare?
+{
+	if (j==0) {
+		if ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) {
+			return 1;
+		}
+	} else if (j==7) {
+		if ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) {
+			return 1;
+		}
+	} else {
+		if (((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+			return 1;
+		}
+	}
+	return -1;
+}
+
+int canWkingMove( struct board * b, int i, int j )				//può la dama bianca muovere?
 {
 	if (i==0 && j==0) {
-		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0)) {
+		if (b->data[i+1][j+1]==0) {
 			return 1;
 		}
 	} else if (i==0 && j==7) {
-		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+		if (b->data[i+1][j-1]==0) {
 			return 1;
 		}
 	} else if (i==7 && j==0) {
-		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
+		if (b->data[i-1][j+1]==0) {
 			return 1;
 		}
 	} else if (i==7 && j==7) {
-		if (b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+		if (b->data[i-1][j-1]==0) {
 			return 1;
 		}
 	} else if (i==0) {
-		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
-			b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+		if (b->data[i+1][j+1]==0 || b->data[i+1][j-1]==0) {
 				return 1;
 		}
 	} else if (i==7) {
-		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) ||
-			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+		if (b->data[i-1][j+1]==0 || b->data[i-1][j-1]==0) {
 				return 1;
 		}
 	} else if (j==0) {
-		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
-			b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
+		if (b->data[i+1][j+1]==0 || b->data[i-1][j+1]==0) {
 				return 1;
 		}
 	} else if (j==7) {
-		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) ||
-			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+		if (b->data[i+1][j-1]==0 || b->data[i-1][j-1]==0) {
 				return 1;
 		}
 	} else {
-		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
-			b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) ||
-			b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) ||
-			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+		if (b->data[i+1][j+1]==0 || b->data[i+1][j-1]==0 || b->data[i-1][j+1]==0 || b->data[i-1][j-1]==0) {
 				return 1;
 		}
 	}
+	return -1;
 }
 
-int canMoveBking( struct board * b, int i, int j )				//può la dama nera muovere?
+int canWkingCapt( struct board * b, int i, int j )				//può la dama bianca mangiare?
 {
 	if (i==0 && j==0) {
-		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0)) {
+		if ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) {
 			return 1;
 		}
 	} else if (i==0 && j==7) {
-		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0)) {
+		if ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) {
 			return 1;
 		}
 	} else if (i==7 && j==0) {
-		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0)) {
+		if ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) {
 			return 1;
 		}
 	} else if (i==7 && j==7) {
-		if (b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+		if ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0) {
 			return 1;
 		}
 	} else if (i==0) {
-		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
-			b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0)) {
+		if (((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
+			((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
 				return 1;
 		}
 	} else if (i==7) {
-		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0) ||
-			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+		if (((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) ||
+			((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
 				return 1;
 		}
 	} else if (j==0) {
-		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
-			b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0)) {
+		if (((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
+			((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
 				return 1;
 		}
 	} else if (j==7) {
-		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) ||
-			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+		if (((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) ||
+			((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
 				return 1;
 		}
 	} else {
-		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
-			b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) ||
-			b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0) ||
-			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+		if (((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
+			((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) ||
+			((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) ||
+			((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
 				return 1;
 		}
 	}
+	return -1;
+}
+
+int canBkingMove( struct board * b, int i, int j )				//può la dama nera muovere?
+{
+	if (i==0 && j==0) {
+		if (b->data[i+1][j+1]==0) {
+			return 1;
+		}
+	} else if (i==0 && j==7) {
+		if (b->data[i+1][j-1]==0) {
+			return 1;
+		}
+	} else if (i==7 && j==0) {
+		if (b->data[i-1][j+1]==0) {
+			return 1;
+		}
+	} else if (i==7 && j==7) {
+		if (b->data[i-1][j-1]==0) {
+			return 1;
+		}
+	} else if (i==0) {
+		if (b->data[i+1][j+1]==0 || b->data[i+1][j-1]==0) {
+				return 1;
+		}
+	} else if (i==7) {
+		if (b->data[i-1][j+1]==0 || b->data[i-1][j-1]==0) {
+				return 1;
+		}
+	} else if (j==0) {
+		if (b->data[i+1][j+1]==0 || b->data[i-1][j+1]==0) {
+				return 1;
+		}
+	} else if (j==7) {
+		if (b->data[i+1][j-1]==0 || b->data[i-1][j-1]==0) {
+				return 1;
+		}
+	} else {
+		if (b->data[i+1][j+1]==0 || b->data[i+1][j-1]==0 || b->data[i-1][j+1]==0 || b->data[i-1][j-1]==0) {
+				return 1;
+		}
+	}
+	return -1;
+}
+
+int canBkingCapt( struct board * b, int i, int j )				//può la dama nera mangiare?
+{
+	if (i==0 && j==0) {
+		if ((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) {
+			return 1;
+		}
+	} else if (i==0 && j==7) {
+		if ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) {
+			return 1;
+		}
+	} else if (i==7 && j==0) {
+		if ((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0) {
+			return 1;
+		}
+	} else if (i==7 && j==7) {
+		if ((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0) {
+			return 1;
+		}
+	} else if (i==0) {
+		if (((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
+			((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0)) {
+				return 1;
+		}
+	} else if (i==7) {
+		if (((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0) ||
+			((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+				return 1;
+		}
+	} else if (j==0) {
+		if (((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
+			((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0)) {
+				return 1;
+		}
+	} else if (j==7) {
+		if (((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) ||
+			((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+				return 1;
+		}
+	} else {
+		if (((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
+			((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) ||
+			((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0) ||
+			((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+				return 1;
+		}
+	}
+	return -1;
 }
 
 
@@ -249,7 +373,7 @@ int canMoveBking( struct board * b, int i, int j )				//può la dama nera muover
  */
 int nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per scontato che la casella di partenza e quella di
 {																			//arrivo appartengano alla board
-	
+	return 1;
 }
 
 /*

@@ -25,5 +25,7 @@ void setAllBoardEmpty( struct board * b );
 int canMove ( struct board * b, int m);
 int canMoveWhite( struct board * b, int i, int j );
 int canMoveBlack( struct board * b, int i, int j );
+int canMoveWking( struct board * b, int i, int j );
+int canMoveBking( struct board * b, int i, int j );
 
 #endif

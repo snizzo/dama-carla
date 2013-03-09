@@ -77,11 +77,11 @@ int canMove ( struct board * b, int m)
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
 				if (b->data[i][j]==1) {
-					if (canMoveWhite(&b, i, j)==1) {
+					if (canMoveWhite(b, i, j)==1) {
 						c++;
 					}
 				} else if (b->data[i][j]==2) {
-					if (canMoveWhite(&b, i ,j)==1) {
+					if (canMoveWking(b, i ,j)==1) {
 						c++;
 					}
 				}
@@ -93,11 +93,11 @@ int canMove ( struct board * b, int m)
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
 				if (b->data[i][j]==3) {
-					if (canMoveBlack(&b, i, j)==1) {
+					if (canMoveBlack(b, i, j)==1) {
 						c++;
 					}
 				} else if (b->data[i][j]==4) {
-					if (canMoveBlack(&b, i ,j)==1) {
+					if (canMoveBking(b, i ,j)==1) {
 						c++;
 					}
 				}
@@ -113,7 +113,7 @@ int canMove ( struct board * b, int m)
 			}
 }
 
-int canMoveWhite( struct board * b, int i, int j )			//può la pedina bianca muovere?
+int canMoveWhite( struct board * b, int i, int j )				//può la pedina bianca muovere?
 {
 	if (j==0) {
 		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
@@ -130,7 +130,7 @@ int canMoveWhite( struct board * b, int i, int j )			//può la pedina bianca muo
 	}
 }
 
-int canMoveBlack( struct board * b, int i, int j )			//può la pedina nera muovere?
+int canMoveBlack( struct board * b, int i, int j )				//può la pedina nera muovere?
 {
 	if (j==0) {
 		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0)) {
@@ -147,28 +147,101 @@ int canMoveBlack( struct board * b, int i, int j )			//può la pedina nera muove
 	}
 }
 
-//int canMove2( struct board * b, int i, int j )			//può la dama bianca muovere?
-//{
-//	if (i==0 && j==0) {
-//		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0)) {
-//			return 1;
-//		}
-//	} else if (i==0 && j==7) {
-//		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
-//			return 1;
-//		}
-//	} else if (i==7 && j==0) {
-//		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
-//			return 1;
-//		}
-//	} else if (i==7 && j==7) {
-//		if (b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
-//			return 1;
-//		}
-//	} else if 
+int canMoveWking( struct board * b, int i, int j )				//può la dama bianca muovere?
+{
+	if (i==0 && j==0) {
+		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0)) {
+			return 1;
+		}
+	} else if (i==0 && j==7) {
+		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+			return 1;
+		}
+	} else if (i==7 && j==0) {
+		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
+			return 1;
+		}
+	} else if (i==7 && j==7) {
+		if (b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+			return 1;
+		}
+	} else if (i==0) {
+		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
+			b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+				return 1;
+		}
+	} else if (i==7) {
+		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) ||
+			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+				return 1;
+		}
+	} else if (j==0) {
+		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
+			b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
+				return 1;
+		}
+	} else if (j==7) {
+		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) ||
+			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+				return 1;
+		}
+	} else {
+		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
+			b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) ||
+			b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) ||
+			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+				return 1;
+		}
+	}
+}
 
-
-
+int canMoveBking( struct board * b, int i, int j )				//può la dama nera muovere?
+{
+	if (i==0 && j==0) {
+		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0)) {
+			return 1;
+		}
+	} else if (i==0 && j==7) {
+		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0)) {
+			return 1;
+		}
+	} else if (i==7 && j==0) {
+		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0)) {
+			return 1;
+		}
+	} else if (i==7 && j==7) {
+		if (b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+			return 1;
+		}
+	} else if (i==0) {
+		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
+			b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0)) {
+				return 1;
+		}
+	} else if (i==7) {
+		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0) ||
+			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+				return 1;
+		}
+	} else if (j==0) {
+		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
+			b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0)) {
+				return 1;
+		}
+	} else if (j==7) {
+		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) ||
+			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+				return 1;
+		}
+	} else {
+		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
+			b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) ||
+			b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0) ||
+			b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+				return 1;
+		}
+	}
+}
 
 
 /*
@@ -186,7 +259,7 @@ void printBoard( struct board * b )
 {	 
 	for (int i=0;i<8;i++){
 		for (int j=0;j<8;j++){
-			printf ("%i", b->data[i][j]);
+			printf ("%i ", b->data[i][j]);
 		}
 		printf ("\n");
 	}

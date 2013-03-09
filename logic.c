@@ -64,24 +64,112 @@ void prepareBoard( struct board * b )
 
 }
 
-int nextMove( struct board * b, int i, int j, int k, int l, int m ) //i,j: coordinate pedina da muovere. k,l: coord. "destinazione". m:1 bianco 2: nero
+/*
+ * se un giocatore al suo turno non può muovere niente, perde: se c>0 può muovere, se c=0 partita persa per il giocatore di turno
+ */
+int canMove ( struct board * b, int m)
 {
-	if (b->data[i][j]==0 || i>7 || j>7 || k>7 || l>7) {				//il genio tenta di muovere una pedina che non esiste
-		printf ("nonnònnò\n");
+	int c;													//orribile contatore che conta se c'è almeno una mossa che il
+	if (m==1) {												//giocatore può fare
+		c=0;	
+		for (int i=0;i<8;i++){
+			for (int j=0;j<8;j++){
+				if (b->data[i][j]==1) {
+					if (canMove1(&b, i, j)==1) {
+						c++;
+					}
+				} else if (b->data[i][j]==2) {
+					if (canMove2(&b, i ,j)==1) {
+						c++;
+					}
+				}
+			}
+		}
+	} else if (m==2) {
+		int c
+		c=0;
+		for (int i=0;i<8;i++){
+			for (int j=0;j<8;j++){
+				if (b->data[i][j]==3) {
+					if (canMove3(&b, i, j)==1) {
+						c++;
+					}
+				} else if (b->data[i][j]==4) {
+					if (canMove4(&b, i ,j)==1) {
+						c++;
+					}
+				}
+			}
+		}
+	}
+	if (c=0) {return -1}
+}
+
+int canMove1( struct board * b, int i, int j )			//può la pedina bianca muovere?
+{
+	if (j==0) {
+		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
+			return 1;
+		}
+	} else if (j==7) {
+		if (b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+			return 1;
+		}
 	} else {
-		if (m==1) {													//giocatore bianco muove
-			if (b->data[i-1][j-1]==0 && (k==i+1 || l==j-1)) {		//bianco muove a sinistra
-				b->data[i][j] = 0;
-				b->data[i-1][j-1] = 1;
-			} else if (b->data[i-1][j+1]==0 && (k==i+1 || l==j+1)) {		//bianco muove a destra
-				b->data[i][j] = 0;
-				b->data[i-1][j+1] = 1;
-			} else if (b->data[i-2][j-2]==0 && (k==i-2) && (l==j-2) && (b->data[i-1][j-1]
+		if (b->data[i-1][j-1]==0 || b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+			return 1;
 		}
 	}
 }
 
-void move ( struct board * b, int i, int j, int k, int l )
+int canMove3( struct board * b, int i, int j )			//può la pedina nera muovere?
+{
+	if (j==0) {
+		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0)) {
+			return 1;
+		}
+	} else if (j==7) {
+		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+			return 1;
+		}
+	} else {
+		if (b->data[i+1][j-1]==0 || b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+			return 1;
+		}
+	}
+}
+
+int canMove2( struct board * b, int i, int j )			//può la dama bianca muovere?
+{
+	if (i==0 && j==0) {
+		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0)) {
+			return 1;
+		}
+	} else if (i==0 && j==7) {
+		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+			return 1;
+		}
+	} else if (i==7 && j==0) {
+		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
+			return 1;
+		}
+	} else if (i==7 && j==7) {
+		if (b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+			return 1;
+		}
+	} else if 
+
+
+
+
+
+/*
+ * i,j=coordinate pedina/dama da spostare; k,l=coordinate "arrivo"; m= 1 bianco 2 nero
+ */
+int nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per scontato che la casella di partenza e quella di
+{																			//arrivo appartengano alla board
+	
+}
 
 /*
  * Print internal data board.
@@ -94,9 +182,6 @@ void printBoard( struct board * b )
 		}
 		printf ("\n");
 	}
-	
-	// TODO: complete function that prints board
-	// mainly for debug purposes
 }
 
 /*

@@ -18,7 +18,7 @@ struct board{
 	int data[8][8];
 };
 
-int nextMove( struct board * b, int i, int j, int k, int l, int m );
+void nextMove( struct board * b, int i, int j, int k, int l, int m );
 void prepareBoard( struct board * b );
 void printBoard( struct board * b );
 void setAllBoardEmpty( struct board * b );
@@ -31,6 +31,10 @@ int canWkingMove( struct board * b, int i, int j );
 int canWkingCapt( struct board * b, int i, int j );
 int canBkingMove( struct board * b, int i, int j );
 int canBkingCapt( struct board * b, int i, int j );
+int move( struct board *b, int i, int j, int k, int l);
+int capture( struct board *b, int i, int j, int k, int l);
+void changeBoard( struct board * b, int i, int j,int c);
+
 
 
 #endif

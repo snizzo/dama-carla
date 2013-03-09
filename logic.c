@@ -23,6 +23,8 @@ int main()
 	
 	prepareBoard(&b);
 	
+	canMove( &b, 1);
+	
 	nextMove(&b, 5, 2, 4, 3, 1);
 
 	printBoard(&b);
@@ -75,37 +77,43 @@ int canMove ( struct board * b, int m)
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
 				if (b->data[i][j]==1) {
-					if (canMove1(&b, i, j)==1) {
+					if (canMoveWhite(&b, i, j)==1) {
 						c++;
 					}
 				} else if (b->data[i][j]==2) {
-					if (canMove2(&b, i ,j)==1) {
+					if (canMoveWhite(&b, i ,j)==1) {
 						c++;
 					}
 				}
 			}
 		}
 	} else if (m==2) {
-		int c
+		int c;
 		c=0;
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
 				if (b->data[i][j]==3) {
-					if (canMove3(&b, i, j)==1) {
+					if (canMoveBlack(&b, i, j)==1) {
 						c++;
 					}
 				} else if (b->data[i][j]==4) {
-					if (canMove4(&b, i ,j)==1) {
+					if (canMoveBlack(&b, i ,j)==1) {
 						c++;
 					}
 				}
 			}
 		}
 	}
-	if (c=0) {return -1}
+	if (c==0) {
+		printf ("perso\n");
+		return -1;
+		} else {
+			printf ("ci sono mosse\n");
+			return 1;
+			}
 }
 
-int canMove1( struct board * b, int i, int j )			//può la pedina bianca muovere?
+int canMoveWhite( struct board * b, int i, int j )			//può la pedina bianca muovere?
 {
 	if (j==0) {
 		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
@@ -122,7 +130,7 @@ int canMove1( struct board * b, int i, int j )			//può la pedina bianca muovere
 	}
 }
 
-int canMove3( struct board * b, int i, int j )			//può la pedina nera muovere?
+int canMoveBlack( struct board * b, int i, int j )			//può la pedina nera muovere?
 {
 	if (j==0) {
 		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0)) {
@@ -139,25 +147,25 @@ int canMove3( struct board * b, int i, int j )			//può la pedina nera muovere?
 	}
 }
 
-int canMove2( struct board * b, int i, int j )			//può la dama bianca muovere?
-{
-	if (i==0 && j==0) {
-		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0)) {
-			return 1;
-		}
-	} else if (i==0 && j==7) {
-		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
-			return 1;
-		}
-	} else if (i==7 && j==0) {
-		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
-			return 1;
-		}
-	} else if (i==7 && j==7) {
-		if (b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
-			return 1;
-		}
-	} else if 
+//int canMove2( struct board * b, int i, int j )			//può la dama bianca muovere?
+//{
+//	if (i==0 && j==0) {
+//		if (b->data[i+1][j+1]==0 || ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0)) {
+//			return 1;
+//		}
+//	} else if (i==0 && j==7) {
+//		if (b->data[i+1][j-1]==0 || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+//			return 1;
+//		}
+//	} else if (i==7 && j==0) {
+//		if (b->data[i-1][j+1]==0 || ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
+//			return 1;
+//		}
+//	} else if (i==7 && j==7) {
+//		if (b->data[i-1][j-1]==0 || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+//			return 1;
+//		}
+//	} else if 
 
 
 

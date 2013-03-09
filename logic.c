@@ -71,9 +71,9 @@ void prepareBoard( struct board * b )
  */
 int canMove ( struct board * b, int m)
 {
-	int c;													//orribile contatore che conta se c'è almeno una mossa che il
+	int c = 0;													//orribile contatore che conta se c'è almeno una mossa che il
 	if (m==1) {												//giocatore può fare
-		c=0;	
+		c=0;
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
 				if (b->data[i][j]==1) {
@@ -88,7 +88,6 @@ int canMove ( struct board * b, int m)
 			}
 		}
 	} else if (m==2) {
-		int c;
 		c=0;
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
@@ -415,6 +414,7 @@ int move( struct board *b, int i, int j, int k, int l)
 			return -1;
 		}
 	}
+	return 1;
 }
 
 /*
@@ -464,6 +464,7 @@ int capture( struct board *b, int i, int j, int k, int l)
 			return -1;
 		}
 	}
+	return 1;
 }
 		
 

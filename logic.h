@@ -18,7 +18,7 @@ struct board{
 	int data[8][8];
 };
 
-void nextMove( struct board * b, int i, int j, int k, int l, int m );
+int nextMove( struct board * b, int i, int j, int k, int l, int m );
 void prepareBoard( struct board * b );
 void printBoard( struct board * b );
 void setAllBoardEmpty( struct board * b );

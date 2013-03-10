@@ -356,10 +356,10 @@ int nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per s
 			}
 			if (c>0) {
 				capture(b, i, j, k, l);										//la riga successiva è la mangiata multipla
-				if ((canWhiteCapt(b, k, l)==1 || canWkingCapt(b, k, l)==1) && capture(b, i, j, k, l)==1) {
+				
 					//serve un nuovo input del giocatore che decide in che casella andare per mangiare,
 					//a quel punto si richiama capture(b, k, l, (input del giocatore), (input del giocatore))
-				}
+				
 			} else {
 				move(b, i, j, k, l);
 			}

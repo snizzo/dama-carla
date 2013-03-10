@@ -14,5 +14,6 @@ int saveRecord(char * set, char * record, char * value);
 char * readRecord(char * set, char * record);
 char * buildFilePath(char * str1, char * str2);
 struct token * getTokens(char * record);
+int deleteRecord(char * set, char * record);
 
 #endif

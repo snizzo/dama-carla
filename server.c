@@ -10,8 +10,7 @@ int areEqual(char * s1, char * s2);
 
 int main()
 {
-	
-	
+	deleteRecord("config", "name");
 	
 	//initializing server network
 	struct server_network net;
@@ -34,6 +33,11 @@ int main()
 		printf("%s\n", message->msg1);
 		
 		printf("Incoming connection.\n");
+		
+		struct netmessage response;
+		setNetMessage(&response, "risp", "rispostella", "rispostuzz", "", "rispostinax");
+		
+		sendServerMessage(&net, &response);
 	}
 	
 	closeServerNetwork(&net);

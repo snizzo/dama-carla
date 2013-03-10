@@ -25,7 +25,7 @@ int main()
 	
 	canMove( &b, 1);
 	
-	nextMove(&b, 5, 2, 4, 3, 1);
+	nextMove(&b, 3, 2, 1, 4, 1);
 
 	printBoard(&b);
 	
@@ -34,35 +34,35 @@ int main()
 
 void prepareBoard( struct board * b )
 {
-	b->data[0][7] = 3;
-	b->data[0][5] = 3;
-	b->data[0][3] = 3;
-	b->data[0][1] = 3;
+	b->data[0][7] = 0;
+	b->data[0][5] = 0;
+	b->data[0][3] = 0;
+	b->data[0][1] = 0;
 	
-	b->data[1][6] = 3;
-	b->data[1][4] = 3;
-	b->data[1][2] = 3;
-	b->data[1][0] = 3;
+	b->data[1][6] = 0;
+	b->data[1][4] = 0;
+	b->data[1][2] = 0;
+	b->data[1][0] = 0;
 	
-	b->data[2][7] = 3;
-	b->data[2][5] = 3;
-	b->data[2][3] = 3;
-	b->data[2][1] = 3;
+	b->data[2][7] = 0;
+	b->data[2][5] = 0;
+	b->data[2][3] = 0;
+	b->data[2][1] = 0;
 	
-	b->data[7][6] = 1;
-	b->data[7][4] = 1;
-	b->data[7][2] = 1;
-	b->data[7][0] = 1;
+	b->data[7][6] = 0;
+	b->data[7][4] = 0;
+	b->data[7][2] = 0;
+	b->data[7][0] = 0;
 	
-	b->data[5][6] = 1;
-	b->data[5][4] = 1;
-	b->data[5][2] = 1;
-	b->data[5][0] = 1;
+	b->data[5][6] = 0;
+	b->data[5][4] = 0;
+	b->data[5][2] = 0;
+	b->data[5][0] = 0;
 	
-	b->data[6][7] = 1;
-	b->data[6][5] = 1;
-	b->data[6][3] = 1;
-	b->data[6][1] = 1;
+	b->data[6][7] = 0;
+	b->data[6][5] = 0;
+	b->data[6][3] = 0;
+	b->data[6][1] = 0;
 
 }
 
@@ -72,7 +72,7 @@ void prepareBoard( struct board * b )
 int canMove ( struct board * b, int m)
 {
 	int c = 0;													//orribile contatore che conta se c'è almeno una mossa che il
-	if (m==1) {												//giocatore può fare
+	if (m==1) {													//giocatore può fare
 		c=0;
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
@@ -342,38 +342,54 @@ int canBkingCapt( struct board * b, int i, int j )				//può la dama nera mangia
  * e il giocatore ha selezionato la giusta casella per mangiare, modifica la board e il turno finisce, se una delle due
  * condizioni non è soddisfatta dice "devi mangiare per forza, rifai la mossa"; move funzionerà in modo simile
  */
-void nextMove( struct board * b, int i, int j, int k, int l, int m )	//dà per scontato che la casella di partenza e quella di
+int nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per scontato che la casella di partenza e quella di
 {																			//arrivo appartengano alla board
 	if (m==1) {																//gioca il bianco
 		if ((b->data[i][j]==1 || b->data[i][j]==2) && b->data[k][l]==0) {
+			int c = 0;
 			for (int d=0;d<8;d++){
 				for (int e=0;e<8;e++){
 					if (canWhiteCapt(b, d, e)==1 || canWkingCapt(b, d, e)==1) {
-						capture(b, i, j, k, l);
-					} else {
-						move(b, i, j, k, l);
+						c++;
 					}
 				}
 			}
+			if (c>0) {
+				capture(b, i, j, k, l);										//la riga successiva è la mangiata multipla
+				if ((canWhiteCapt(b, k, l)==1 || canWkingCapt(b, k, l)==1) && capture(b, i, j, k, l)==1) {
+					//serve un nuovo input del giocatore che decide in che casella andare per mangiare,
+					//a quel punto si richiama capture(b, k, l, (input del giocatore), (input del giocatore))
+				}
+			} else {
+				move(b, i, j, k, l);
+			}
 		} else {
 			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
+			return -1;
 		}
 	} else {																//gioca il nero
 		if ((b->data[i][j]==3 || b->data[i][j]==4) && b->data[k][l]==0) {
+			int c = 0;
 			for (int d=0;d<8;d++){
 				for (int e=0;e<8;e++){
 					if (canBlackCapt(b, d, e)==1 || canWkingCapt(b, d, e)==1) {
-						capture(b, i, j, k, l);
-					} else {
-						move(b, i, j, k, l);
+						c++;
 					}
 				}
 			}
+			if (c>0) {
+				capture(b, i, j, k, l);
+			} else {
+				move(b, i, j, k, l);
+			}
 		} else {
 			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
+			return -1;
 		}
 	}
-}
+	return 55;							//impossibile che si attivi ma fa sparire il warning che altrimenti non so come farlo xD
+}										//visto che è inutile dare 1 quando si attiva capture o move perchè anche quelle
+										//potrebbero fallire
 
 int move( struct board *b, int i, int j, int k, int l)
 {

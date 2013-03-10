@@ -6,13 +6,12 @@
 #include "network.h"
 #include "filesystem.h"
 
+int areEqual(char * s1, char * s2);
 
 int main()
 {
 	
 	
-	saveRecord("config", "matrioska", "bubua");
-	readRecord("config", "barabba");
 	
 	//initializing server network
 	struct server_network net;
@@ -22,19 +21,29 @@ int main()
 	{
 		struct netmessage * message = readServerMessage(&net);
 		
-		
+		if (areEqual("ping", message->msg1)) {
+			struct netmessage response;
+			setNetMessage(&response, "pong", "", "", "", "");
+			sendServerMessage(&net, &response);
+		} else {
+			struct netmessage response;
+			setNetMessage(&response, "nope", "", "", "", "");
+			sendServerMessage(&net, &response);
+		}
 		
 		printf("%s\n", message->msg1);
 		
 		printf("Incoming connection.\n");
-		
-		struct netmessage response;
-		setNetMessage(&response, "risp", "rispostella", "rispostuzz", "", "rispostinax");
-		
-		sendServerMessage(&net, &response);
 	}
 	
 	closeServerNetwork(&net);
 	
 	return EXIT_SUCCESS;
+}
+
+int areEqual(char * s1, char * s2)
+{
+	if (strcmp(s1, s2)==0){
+		return 1;
+	}
 }

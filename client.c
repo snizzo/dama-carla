@@ -11,7 +11,7 @@ int main()
 	struct client_network net;
 	
 	struct netmessage message;
-	setNetMessage(&message, "register", "snizzo", "mypwd", "", "");
+	setNetMessage(&message, "ping", "snizzo", "mypwd", "", "");
 	
 	sendClientMessage(&net, &message);
 	

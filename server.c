@@ -4,10 +4,16 @@
 //specific lib inclusion
 #include "network_data.h"
 #include "network.h"
+#include "filesystem.h"
 
 
 int main()
-{	
+{
+	
+	
+	saveRecord("config", "matrioska", "bubua");
+	readRecord("config", "barabba");
+	
 	//initializing server network
 	struct server_network net;
 	openServerNetwork(&net);

@@ -72,28 +72,44 @@ int saveRecord(char * set, char * record, char * value)
 
 int isPresentRecord(char * set, char * record)
 {
+	
+	
+	
 	FILE * fp;
 	char * folder = "data/";
 	char * destination = buildFilePath(folder, set);
 	char current[100];
 	
+	fp = fopen(destination, "a");
+	fclose(fp);
+	
 	fp = fopen(destination, "r");
 	
+	//check if file is empty
+	if(isFileEmpty(fp)){
+		fclose(fp);
+		free(destination);
+		return 0;
+	}
 	
 	//iterate until end of file is reached
-	do{
+	while(!feof(fp)){
+		
 		fscanf(fp,"%s\n", current);
-		
-		struct token * tokens = getTokens(current);
-		
-		if(strcmp(tokens->key, record)==0){
+		if(strlen(current)>3){
+			struct token * tokens = getTokens(current);
+			
+			if(strcmp(tokens->key, record)==0){
+				fclose(fp);
+				free(destination);
+				free(tokens);
+				return 1;
+			}
+			
 			free(tokens);
-			return 1;
 		}
 		
-		free(tokens);
-		
-	}while(!feof(fp));
+	}
 	
 	fclose(fp);
 	free(destination);
@@ -195,4 +211,18 @@ int deleteRecord(char * set, char * record)
 	free(tempDestination);
 	
 	return 1;
+}
+
+int isFileEmpty(FILE * file)
+{
+    long savedOffset = ftell(file);
+    fseek(file, 0, SEEK_END);
+
+    if (ftell(file) == 0)
+    {
+        return 1;
+    }
+	
+    fseek(file, savedOffset, SEEK_SET);
+    return 0;
 }

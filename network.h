@@ -32,10 +32,13 @@ void openClientNetwork(struct client_network * net);
 void sendClientMessage(struct client_network * net, struct netmessage * message);
 struct netmessage * readClientMessage(struct client_network * net);
 
-//function prototypes of network.c SERVER
+//SERVER
 void openServerNetwork(struct server_network * net);
 struct netmessage * readServerMessage(struct server_network * net);
 void sendServerMessage(struct server_network * net, struct netmessage * message);
 void closeServerNetwork(struct server_network * net);
 
+//UTILS
+void singleCommand(struct server_network * net, char * cmd);
+int areEqual(char * s1, char * s2);
 #endif

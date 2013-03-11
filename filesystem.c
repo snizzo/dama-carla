@@ -55,11 +55,47 @@ int saveRecord(char * set, char * record, char * value)
 	
 	char * destination = buildFilePath(folder, set);
 	
-	//append to the end of file
-	fp = fopen(destination, "a+");
-	fprintf(fp, "%s|%s\n", record, value);
-	fclose(fp);
+	if(isPresentRecord(set, record)){
+		deleteRecord(set, record);
+		saveRecord(set, record, value);
+	} else {
+		//append to the end of file
+		fp = fopen(destination, "a+");
+		fprintf(fp, "%s|%s\n", record, value);
+		fclose(fp);
+	}
 	
+	free(destination);
+	
+	return 1;
+}
+
+int isPresentRecord(char * set, char * record)
+{
+	FILE * fp;
+	char * folder = "data/";
+	char * destination = buildFilePath(folder, set);
+	char current[100];
+	
+	fp = fopen(destination, "r");
+	
+	
+	//iterate until end of file is reached
+	do{
+		fscanf(fp,"%s\n", current);
+		
+		struct token * tokens = getTokens(current);
+		
+		if(strcmp(tokens->key, record)==0){
+			free(tokens);
+			return 1;
+		}
+		
+		free(tokens);
+		
+	}while(!feof(fp));
+	
+	fclose(fp);
 	free(destination);
 	
 	return 0;

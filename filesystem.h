@@ -16,5 +16,6 @@ char * readRecord(char * set, char * record);
 char * buildFilePath(char * str1, char * str2);
 struct token * getTokens(char * record);
 int deleteRecord(char * set, char * record);
+int isFileEmpty(FILE * file);
 
 #endif

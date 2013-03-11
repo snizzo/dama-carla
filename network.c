@@ -122,3 +122,20 @@ struct netmessage * readClientMessage(struct client_network * net)
 	
 	return (struct netmessage *) net->buffer;
 }
+
+//utils--------------------------------------------------------------
+void singleCommand(struct server_network * net, char * cmd)
+{
+	struct netmessage response;
+	setNetMessage(&response, cmd, "", "", "", "");
+	sendServerMessage(net, &response);
+}
+
+int areEqual(char * s1, char * s2)
+{
+	if (strcmp(s1, s2)==0){
+		return 1;
+	} else {
+		return 0;
+	}
+}

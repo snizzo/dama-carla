@@ -9,8 +9,8 @@
 int areEqual(char * s1, char * s2);
 
 int main()
-{
-	deleteRecord("config", "name");
+{	
+	saveRecord("config", "username", "snizza");
 	
 	//initializing server network
 	struct server_network net;
@@ -49,5 +49,7 @@ int areEqual(char * s1, char * s2)
 {
 	if (strcmp(s1, s2)==0){
 		return 1;
+	} else {
+		return 0;
 	}
 }

@@ -34,6 +34,7 @@ int canBkingCapt( struct board * b, int i, int j );
 int move( struct board *b, int i, int j, int k, int l);
 int capture( struct board *b, int i, int j, int k, int l);
 void changeBoard( struct board * b, int i, int j,int c);
+void mirrorBoard( struct board * b);
 
 
 

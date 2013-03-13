@@ -29,14 +29,16 @@ int main()
 
 	printBoard(&b);
 	
+	mirrorBoard(&b);
+	
 	return 0;
 }
 
 void prepareBoard( struct board * b )
 {
-	b->data[0][7] = 0;
-	b->data[0][5] = 0;
-	b->data[0][3] = 0;
+	b->data[0][7] = 3;
+	b->data[0][5] = 3;
+	b->data[0][3] = 3;
 	b->data[0][1] = 0;
 	
 	b->data[1][6] = 0;
@@ -45,23 +47,23 @@ void prepareBoard( struct board * b )
 	b->data[1][0] = 0;
 	
 	b->data[2][7] = 0;
-	b->data[2][5] = 0;
-	b->data[2][3] = 0;
+	b->data[2][5] = 3;
+	b->data[2][3] = 3;
 	b->data[2][1] = 0;
 	
 	b->data[7][6] = 0;
-	b->data[7][4] = 0;
+	b->data[7][4] = 1;
 	b->data[7][2] = 0;
-	b->data[7][0] = 0;
+	b->data[7][0] = 1;
 	
-	b->data[5][6] = 0;
+	b->data[5][6] = 1;
 	b->data[5][4] = 0;
-	b->data[5][2] = 0;
+	b->data[5][2] = 1;
 	b->data[5][0] = 0;
 	
 	b->data[6][7] = 0;
-	b->data[6][5] = 0;
-	b->data[6][3] = 0;
+	b->data[6][5] = 1;
+	b->data[6][3] = 1;
 	b->data[6][1] = 0;
 
 }
@@ -499,6 +501,22 @@ void changeBoard( struct board * b, int i, int j,int c)
 	}
 }
 
+void mirrorBoard( struct board * b)				//da modificare in base a come funzionerà il client
+{
+	int a[8][8];
+	for (int i=0;i<8;i++){
+		for (int j=0;j<8;j++){
+			a[i][j]=b->data[7-i][7-j];
+		}
+	}
+	printf ("\n\n");
+	for (int i=0;i<8;i++){							//print per debug
+		for (int j=0;j<8;j++){
+			printf ("%i ", a[i][j]);
+		}
+		printf ("\n");
+	}
+}
 
 /*
  * Print internal data board.

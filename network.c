@@ -25,7 +25,7 @@
 #define TARGET_IP "127.0.0.1"
 
 /*
- * Initiate a server netowork, listening for clients in PORTNUM
+ * Initiate a server network, listening for clients in PORTNUM
  */
 void openServerNetwork(struct server_network * net)
 {

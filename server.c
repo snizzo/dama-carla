@@ -5,6 +5,7 @@
 #include "network_data.h"
 #include "network.h"
 #include "filesystem.h"
+#include "auth.h"
 
 int main()
 {	
@@ -30,8 +31,24 @@ int main()
 			} else {
 				singleCommand(&net, "useralreadythere");
 			}
-			
-			
+		
+		// COMMAND: LOGIN <nickname> <password>
+		} else if (areEqual("login", message->msg1)) {
+			if(isPresentRecord("users", message->msg2)){
+				char * password = readRecord("users", message->msg2);
+				
+				if (areEqual(password, message->msg3)){
+					//generating temporary login key (30 chars long) to be sent to the client
+					char * key = generateLoginId();
+					
+					printf("-----LOGIN------\n");
+					printf("Username: %s\n", message->msg2);
+					printf("Password: %s\n", password);
+					printf("Key     : %s\n", key);
+				}
+				free(password);
+			}
+			singleCommand(&net, "done");
 		// COMMAND: <unknown>
 		} else {
 			singleCommand(&net, "commandnotfound");

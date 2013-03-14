@@ -4,6 +4,7 @@
 //specific lib inclusion
 #include "network_data.h"
 #include "network.h"
+#include "auth.h"
  
 int main()
 {
@@ -11,7 +12,7 @@ int main()
 	struct client_network net;
 	
 	struct netmessage message;
-	setNetMessage(&message, "register", "barabba", "zioputtana", "", "");
+	setNetMessage(&message, "login", "snizzo", "mypwd", "", "");
 	
 	sendClientMessage(&net, &message);
 	

@@ -1,9 +1,10 @@
-LIBSOURCES=network_data.c network.c filesystem.c
+LIBSOURCES=network_data.c network.c filesystem.c auth.c
+CC=clang
 CFLAGS=-g -Weverything
 all:
-	clang $(CFLAGS) -o client client.c $(LIBSOURCES)
-	clang $(CFLAGS) -o server server.c $(LIBSOURCES)
-	clang $(CFLAGS) -o logic logic.c
+	$(CC) $(CFLAGS) -o client client.c $(LIBSOURCES)
+	$(CC) $(CFLAGS) -o server server.c $(LIBSOURCES)
+	$(CC) $(CFLAGS) -o logic logic.c
 
 clean:
 	rm client

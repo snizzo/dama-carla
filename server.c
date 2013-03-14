@@ -45,10 +45,15 @@ int main()
 					printf("Username: %s\n", message->msg2);
 					printf("Password: %s\n", password);
 					printf("Key     : %s\n", key);
+					fullCommand(&net, "done", key, "", "", "");
+				} else {
+				singleCommand(&net, "wrongpassword");
 				}
+				
 				free(password);
+			} else {
+				singleCommand(&net, "usernotfound");
 			}
-			singleCommand(&net, "done");
 		// COMMAND: <unknown>
 		} else {
 			singleCommand(&net, "commandnotfound");

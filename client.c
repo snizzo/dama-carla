@@ -12,7 +12,7 @@ int main()
 	struct client_network net;
 	
 	struct netmessage message;
-	setNetMessage(&message, "login", "snizzo", "mypwd", "", "");
+	setNetMessage(&message, "login", "snizzo", "mypwid", "", "");
 	
 	sendClientMessage(&net, &message);
 	

@@ -21,6 +21,7 @@ int main()
 		// COMMAND: PING
 		if (areEqual("ping", message->msg1)) {
 			singleCommand(&net, "pong");
+		
 			
 		// COMMAND: REGISTER <nickname> <password>
 		} else if (areEqual("register", message->msg1)) {
@@ -32,6 +33,7 @@ int main()
 				singleCommand(&net, "useralreadythere");
 			}
 		
+		
 		// COMMAND: LOGIN <nickname> <password>
 		} else if (areEqual("login", message->msg1)) {
 			if(isPresentRecord("users", message->msg2)){
@@ -39,7 +41,7 @@ int main()
 				
 				if (areEqual(password, message->msg3)){
 					//generating temporary login key (30 chars long) to be sent to the client
-					char * key = generateLoginId();
+					char * key = generateLoginId(); //WARNING: key DOESN'T GET FREED! CURRENTLY MEMLEAKING! 
 					
 					printf("-----LOGIN------\n");
 					printf("Username: %s\n", message->msg2);
@@ -54,6 +56,8 @@ int main()
 			} else {
 				singleCommand(&net, "usernotfound");
 			}
+			
+			
 		// COMMAND: <unknown>
 		} else {
 			singleCommand(&net, "commandnotfound");

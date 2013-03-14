@@ -4,6 +4,7 @@
  */
 
 #include "list.h"
+#include "network.h"
 
 struct llist * createList()
 {
@@ -31,6 +32,36 @@ struct lnode * getLastNode(struct llist * l, struct lnode * n)
 	
 }
 
+struct user * getUserFromKey(struct llist * l, char * key)
+{
+	if (l->first==NULL){
+		return NULL;
+	} else {
+		return getUserFromKeyEngine(key, l->first);
+	}
+}
+
+struct user * getUserFromKeyEngine(char * key, struct lnode * n)
+{
+	if (n->d->u!=NULL){
+		//perform search
+		if(areEqual(n->d->u->key,key)){
+			return n->d->u; //this is the right node
+		} else {
+			if (n->next!=NULL){
+				return getUserFromKeyEngine(key, n->next); //search in the next
+			} else {
+				return NULL; //not found here
+			}
+		}
+	} else {
+		return NULL;
+		//empty node: critical errors!!
+		//FIXME: maybe automatic whiping...
+	}
+
+}
+
 void appendUserNode(struct llist * l, struct user * u1)
 {
 	//create node
@@ -46,5 +77,4 @@ void appendUserNode(struct llist * l, struct user * u1)
 	} else {
 		last->next = node;
 	}
-	
 }

@@ -6,6 +6,8 @@
 #include "network_data.h"
 #include "network.h"
 #include "auth.h"
+#include "list.h"
+#include "filesystem.h"
  
 int main()
 {
@@ -14,12 +16,30 @@ int main()
 	
 	struct client_network net;
 	
+	//login
 	struct netmessage message;
 	setNetMessage(&message, "login", "snizzo", "mypwd", "", "");
 	
 	sendClientMessage(&net, &message);
 	
 	struct netmessage * incoming = readClientMessage(&net);
+	
+	printf("%s\n", incoming->msg1);
+	printf("%s\n", incoming->msg2);
+	printf("%s\n", incoming->msg3);
+	printf("%s\n", incoming->msg4);
+	printf("%s\n", incoming->msg5);
+	
+	sleep(2);
+	
+	char * loginkey = copystring(incoming->msg2);
+	
+	//authping, incoming->msg2 contains the authentication key
+	setNetMessage(&message, "authping", "", "", "", loginkey);
+	
+	sendClientMessage(&net, &message);
+	
+	incoming = readClientMessage(&net);
 	
 	printf("%s\n", incoming->msg1);
 	printf("%s\n", incoming->msg2);

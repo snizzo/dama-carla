@@ -2,24 +2,25 @@
 #define AUTH_H
 
 #include <stdlib.h>
+#include <string.h>
 
 struct user {
-	int id;
-	int request;
-	int game;
 	int wins;
 	int losses;
+	char * gameid;
+	char * key;
 	char * username;
 	char * password;
 };
 
 struct game {
-	int id;
+	char * id;
 	char * white;
 	char * black;
 };
 
 //standard header inclusion
 char * generateLoginId(void);
-
+struct user * createUser(int wins, int losses, char * gameid, char * key, char * username, char * password);
+char * copystring(char * str);
 #endif

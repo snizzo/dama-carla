@@ -2,6 +2,7 @@
 #define LIST_H
 
 #include <stdlib.h>
+#include "auth.h"
 
 /*
 #define llist(t) struct lnode_t { \
@@ -27,6 +28,8 @@ struct llist{
 struct llist * createList(void);
 void appendUserNode(struct llist * l, struct user * u1);
 struct lnode * getLastNode(struct llist * l, struct lnode * n);
+struct user * getUserFromKey(struct llist * l, char * key);
+struct user * getUserFromKeyEngine(char * key, struct lnode * n);
 
 
 #endif

@@ -1,0 +1,15 @@
+COMMAND:    ping
+RESPONSE:   pong
+
+COMMAND:    login <username> <password>
+RESPONSE:   done <loginkey>
+			wrongpassword
+			usernotfound
+
+COMMAND:	register <username> <password>
+RESPONSE:	done
+			alreadythere
+
+COMMAND:	authping <> <> <> <loginkey>
+RESPONSE:	pong <username>
+			unauthorized

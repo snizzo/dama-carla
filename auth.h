@@ -4,13 +4,19 @@
 #include <stdlib.h>
 
 struct user {
-	int userid;
+	int id;
 	int request;
 	int game;
 	int wins;
 	int losses;
 	char * username;
 	char * password;
+};
+
+struct game {
+	int id;
+	char * white;
+	char * black;
 };
 
 //standard header inclusion

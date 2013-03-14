@@ -11,11 +11,11 @@ int main()
 {
 	
 	
-	/*
+	
 	struct client_network net;
 	
 	struct netmessage message;
-	setNetMessage(&message, "login", "snizzo", "mypwid", "", "");
+	setNetMessage(&message, "login", "snizzo", "mypwd", "", "");
 	
 	sendClientMessage(&net, &message);
 	
@@ -26,8 +26,8 @@ int main()
 	printf("%s\n", incoming->msg3);
 	printf("%s\n", incoming->msg4);
 	printf("%s\n", incoming->msg5);
-	*/
 	
+	/*
 	initscr();
 	mvprintw(0, 0,"Nord-ovest"); 
 	mvprintw(LINES-1, 0,"Sud-ovest");
@@ -37,6 +37,6 @@ int main()
 	refresh();  
 	getch();  
 	endwin(); 
-	
+	*/
 	return 0;
 }

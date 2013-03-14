@@ -6,6 +6,7 @@
 #include "network.h"
 #include "filesystem.h"
 #include "auth.h"
+#include "list.h"
 
 int main()
 {	
@@ -13,6 +14,9 @@ int main()
 	//initializing server network
 	struct server_network net;
 	openServerNetwork(&net);
+	
+	struct llist * users = createList();
+	
 	
 	while(net.incoming)
 	{
@@ -22,7 +26,17 @@ int main()
 		if (areEqual("ping", message->msg1)) {
 			singleCommand(&net, "pong");
 		
+		// COMMAND: AUTHPING
+		} else if (areEqual("authping", message->msg1)) {
+			char * loginkey = message->msg5;
+			struct user * logged = getUserFromKey(users, loginkey);
 			
+			if(logged!=NULL){
+				fullCommand(&net, "authpong", logged->username, "", "", "");
+			} else {
+				fullCommand(&net, "unauthorized", "", "", "", "");
+			}
+		
 		// COMMAND: REGISTER <nickname> <password>
 		} else if (areEqual("register", message->msg1)) {
 			if(!isPresentRecord("users", message->msg2)){
@@ -30,7 +44,7 @@ int main()
 				
 				singleCommand(&net, "done");
 			} else {
-				singleCommand(&net, "useralreadythere");
+				singleCommand(&net, "alreadythere");
 			}
 		
 		
@@ -43,7 +57,12 @@ int main()
 					//generating temporary login key (30 chars long) to be sent to the client
 					char * key = generateLoginId(); //WARNING: key DOESN'T GET FREED! CURRENTLY MEMLEAKING! 
 					
-					printf("-----LOGIN------\n");
+					
+					char * nick = copystring(message->msg2);
+					struct user * u = createUser(0,0,"",key,nick,password);
+					appendUserNode(users, u);
+					
+					printf("-----LOGGED------\n");
 					printf("Username: %s\n", message->msg2);
 					printf("Password: %s\n", password);
 					printf("Key     : %s\n", key);
@@ -65,6 +84,7 @@ int main()
 		
 	}
 	
+	free(users);
 	closeServerNetwork(&net);
 	
 	return EXIT_SUCCESS;

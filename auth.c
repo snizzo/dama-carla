@@ -24,3 +24,23 @@ char * generateLoginId()
     
     return key;
 }
+
+char * copystring(char * str)
+{
+	char * copied = malloc(sizeof(char)*strlen(str));
+	strcpy(copied,str);
+	return copied;
+}
+
+struct user * createUser(int wins, int losses, char * gameid, char * key, char * username, char * password)
+{
+	struct user * u = malloc(sizeof(struct user)*1);
+	u->wins = wins;
+	u->losses = losses;
+	u->gameid = gameid;
+	u->key = key;
+	u->username = username;
+	u->password = password;
+	
+	return u;
+}

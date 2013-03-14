@@ -39,6 +39,7 @@ void sendServerMessage(struct server_network * net, struct netmessage * message)
 void closeServerNetwork(struct server_network * net);
 
 //UTILS
+void fullCommand(struct server_network * net, char * cmd1, char * cmd2, char * cmd3, char * cmd4, char * cmd5);
 void singleCommand(struct server_network * net, char * cmd);
 int areEqual(char * s1, char * s2);
 #endif

@@ -363,7 +363,7 @@ int nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per s
 					//a quel punto si richiama capture(b, k, l, (input del giocatore), (input del giocatore))
 				
 			} else {
-				move(b, i, j, k, l);
+				movement(b, i, j, k, l);
 			}
 		} else {
 			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
@@ -382,7 +382,7 @@ int nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per s
 			if (c>0) {
 				capture(b, i, j, k, l);
 			} else {
-				move(b, i, j, k, l);
+				movement(b, i, j, k, l);
 			}
 		} else {
 			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
@@ -393,7 +393,7 @@ int nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per s
 }										//visto che è inutile dare 1 quando si attiva capture o move perchè anche quelle
 										//potrebbero fallire
 
-int move( struct board *b, int i, int j, int k, int l)
+int movement( struct board * b, int i, int j, int k, int l)
 {
 	if (b->data[i][j]==1) {
 		if (k==i-1 && (l==j+1 || l==j-1)) {

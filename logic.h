@@ -12,8 +12,8 @@
 //	0	: empty
 //	1   : white checker (pedina)
 //	3   : black checker (pedina)
-//	2   : white dama
-//	4   : black dama
+//	2   : white king
+//	4   : black king
 struct board{
 	int data[8][8];
 };
@@ -31,7 +31,7 @@ int canWkingMove( struct board * b, int i, int j );
 int canWkingCapt( struct board * b, int i, int j );
 int canBkingMove( struct board * b, int i, int j );
 int canBkingCapt( struct board * b, int i, int j );
-int move( struct board *b, int i, int j, int k, int l);
+int movement( struct board * b, int i, int j, int k, int l);
 int capture( struct board *b, int i, int j, int k, int l);
 void changeBoard( struct board * b, int i, int j,int c);
 void mirrorBoard( struct board * b);

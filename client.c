@@ -13,12 +13,12 @@ int main()
 {
 	
 	
-	
+	/*
 	struct client_network net;
 	
 	//login
 	struct netmessage message;
-	setNetMessage(&message, "login", "snizzo", "mypwd", "", "");
+	setNetMessage(&message, "login", "snizzo", "mypwid", "", "");
 	
 	sendClientMessage(&net, &message);
 	
@@ -29,6 +29,7 @@ int main()
 	printf("%s\n", incoming->msg3);
 	printf("%s\n", incoming->msg4);
 	printf("%s\n", incoming->msg5);
+	*/
 	
 	sleep(2);
 	
@@ -57,6 +58,6 @@ int main()
 	refresh();  
 	getch();  
 	endwin(); 
-	*/
+	
 	return 0;
 }

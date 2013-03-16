@@ -18,7 +18,7 @@ int main()
 	
 	//login
 	struct netmessage message;
-	setNetMessage(&message, "login", "snizzo", "mypwid", "", "");
+	setNetMessage(&message, "login", "snizzo", "mypwd", "", "");
 	
 	sendClientMessage(&net, &message);
 	
@@ -60,4 +60,5 @@ int main()
 	endwin(); 
 	
 	return 0;
+	*/
 }

@@ -13,7 +13,7 @@ int main()
 {
 	
 	
-	/*
+	
 	struct client_network net;
 	
 	//login
@@ -29,14 +29,14 @@ int main()
 	printf("%s\n", incoming->msg3);
 	printf("%s\n", incoming->msg4);
 	printf("%s\n", incoming->msg5);
-	*/
+	
 	
 	sleep(2);
 	
 	char * loginkey = copystring(incoming->msg2);
 	
 	//authping, incoming->msg2 contains the authentication key
-	setNetMessage(&message, "authping", "", "", "", loginkey);
+	setNetMessage(&message, "authping", "", "", "", "brividabadibidi");
 	
 	sendClientMessage(&net, &message);
 	

@@ -27,7 +27,7 @@ char * generateLoginId()
 
 char * copystring(char * str)
 {
-	char * copied = malloc(sizeof(char)*strlen(str));
+	char * copied = malloc(sizeof(char)*(strlen(str)+1));
 	strcpy(copied,str);
 	return copied;
 }

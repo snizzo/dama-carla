@@ -17,7 +17,7 @@ struct llist * createList()
 struct lnode * getLastNode(struct llist * l, struct lnode * n)
 {
 	if (n!=NULL){
-		if (n->next!=NULL){
+		if (n->next==NULL){
 			return n; //this is the last node
 		} else {
 			return getLastNode(l, n->next); //return last of the list
@@ -73,10 +73,10 @@ struct user * getUserFromKey(struct llist * l, char * key)
 
 struct user * getUserFromKeyEngine(char * key, struct lnode * n)
 {
-	if (n->d->u!=NULL){
+	if (n->d.u!=NULL){
 		//perform search
-		if(areEqual(n->d->u->key,key)){
-			return n->d->u; //this is the right node
+		if(areEqual(n->d.u->key,key)){
+			return n->d.u; //this is the right node
 		} else {
 			if (n->next!=NULL){
 				return getUserFromKeyEngine(key, n->next); //search in the next
@@ -101,7 +101,7 @@ void appendUserNode(struct llist * l, struct user * u1)
 {
 	//create node
 	struct lnode * node = malloc(sizeof(struct lnode)*1);
-	node->d->u = u1;
+	node->d.u = u1;
 	node->next = NULL;
 	
 	//append node to last node of the list

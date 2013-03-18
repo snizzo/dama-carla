@@ -17,7 +17,7 @@ union data{
 };
 
 struct lnode {
-	union data * d;
+	union data d;
 	struct lnode * next;
 };
 

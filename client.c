@@ -36,7 +36,7 @@ int main()
 	char * loginkey = copystring(incoming->msg2);
 	
 	//authping, incoming->msg2 contains the authentication key
-	setNetMessage(&message, "authping", "", "", "", "brividabadibidi");
+	setNetMessage(&message, "authping", "", "", "", "" );
 	
 	sendClientMessage(&net, &message);
 	

@@ -75,7 +75,7 @@ int isPresentRecord(char * set, char * record)
 	
 	
 	
-	FILE * fp;
+	FILE * fp = NULL;
 	char * folder = "data/";
 	char * destination = buildFilePath(folder, set);
 	char current[100];
@@ -147,7 +147,7 @@ char * readRecord(char * set, char * record)
 		struct token * tokens = getTokens(current);
 		
 		if(strcmp(tokens->key, record)==0){
-			value = (char *) malloc(sizeof(char)*strlen(tokens->value));
+			value = (char *) malloc(sizeof(char)*(strlen(tokens->value)+1));
 			strcpy(value, tokens->value);
 			free(tokens);
 			break;

@@ -66,7 +66,7 @@ struct netmessage * readServerMessage(struct server_network * net)
 void sendServerMessage(struct server_network * net, struct netmessage * message)
 {
 	char * c = (char *) message;
-	send(net->incoming, c, 250, 0); 
+	send(net->incoming, c, 250, 0);
 	net->incoming = accept(net->mysocket, (struct sockaddr *)&net->dest, &net->socksize);
 }
 

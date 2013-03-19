@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ncurses.h>
 
 //specific lib inclusion
 #include "network_data.h"
@@ -9,12 +8,21 @@
 #include "list.h"
 #include "filesystem.h"
 #include "logic.h"
+#include "interface.h"
  
 int even(int n);
 
 int main()
 {
 	
+	setInterface(); //setting our program to use ncurses
+	
+	showLoginForm(); //show login form
+	
+	unsetInterface(); //unset ncurses
+	
+	
+/*	
 	struct board b;
 	
 	
@@ -52,7 +60,7 @@ int main()
 	printf("%s\n", incoming->msg4);
 	printf("%s\n", incoming->msg5);
 	
-/*
+
 	initscr();
 	mvprintw(0, 0,"Nord-ovest"); 
 	mvprintw(LINES-1, 0,"Sud-ovest");

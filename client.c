@@ -17,7 +17,7 @@ int main()
 	
 	struct board b;
 	
-	/*
+	
 	struct client_network net;
 	
 	//login
@@ -40,7 +40,7 @@ int main()
 	char * loginkey = copystring(incoming->msg2);
 	
 	//authping, incoming->msg2 contains the authentication key
-	setNetMessage(&message, "authping", "", "", "", "" );
+	setNetMessage(&message, "authping", "", "", "", loginkey);
 	
 	sendClientMessage(&net, &message);
 	
@@ -52,7 +52,7 @@ int main()
 	printf("%s\n", incoming->msg4);
 	printf("%s\n", incoming->msg5);
 	
-*/
+/*
 	initscr();
 	mvprintw(0, 0,"Nord-ovest"); 
 	mvprintw(LINES-1, 0,"Sud-ovest");
@@ -123,7 +123,7 @@ int main()
 	refresh();  
 	getch();  
 	endwin(); 
-	
+*/	
 	return 0;
 }
 
@@ -134,3 +134,4 @@ int even(int n) {
 		return 0;
 	}
 }
+

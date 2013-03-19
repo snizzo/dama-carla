@@ -31,37 +31,54 @@ struct lnode * getLastNode(struct llist * l, struct lnode * n)
 	}
 	
 }
-/*
-struct user * getNodeFromUserKey(struct llist * l, char * key)
+
+void deleteUserNode(struct llist * l, char * key)
 {
-	if (l->first==NULL){
-		return NULL;
-	} else {
-		return getUserFromKeyEngine(key, l->first);
-	}
+	deleteUserNodeEngine(key, l->first, NULL, l); //key, current, previous, linked list
 }
 
-struct user * getNodeFromUserKeyEngine(char * key, struct lnode * n)
+void deleteUserNodeEngine(char * key, struct lnode * n, struct lnode * previous, struct llist * list)
 {
-	if (n->d->u!=NULL){
-		//perform search
-		if(areEqual(n->d->u->key,key)){
-			return n->d->u; //this is the right node
-		} else {
-			if (n->next!=NULL){
-				return getUserFromKeyEngine(key, n->next); //search in the next
+	if(areEqual(n->d.u->key, key)){ // if this is the key to be deleted, delete it
+	
+		if(previous==NULL){ // this node is the first of the list
+			
+			if(n->next==NULL){ 		//there's no next node
+				list->first = NULL; //first node of linked list does not exist
+				free(n->d.u); //free user structure
+				free(n); 		//free entire node 
 			} else {
-				return NULL; //not found here
+				list->first = n->next; //first node of linked list does not exist
+				free(n->d.u); //free user structure
+				free(n); 		//free entire node
+				//there is next node. This next node will become the new first node
 			}
+			
+		} else {
+			
+			if(n->next==NULL){
+				//this node is alone. Just free it and remove reference.
+				previous->next = NULL;
+				free(n->d.u); //free user structure
+				free(n); 		//free entire node
+			} else {
+				previous->next = n->next;
+				free(n->d.u); //free user structure
+				free(n); 		//free entire node
+			}
+			
 		}
-	} else {
-		return NULL;
-		//empty node: critical errors!!
-		//FIXME: maybe automatic whiping...
+		
+	} else { // if this is not the right node, go ahead
+	
+		if (n->next!=NULL) {
+			deleteUserNodeEngine(key, n->next, n, list);
+		}
+		
 	}
 
 }
-*/
+
 struct user * getUserFromKey(struct llist * l, char * key)
 {
 	if (l->first==NULL){
@@ -91,12 +108,7 @@ struct user * getUserFromKeyEngine(char * key, struct lnode * n)
 	}
 
 }
-/*
-void deleteUserNode(struct llist * l, char * key)
-{
-	struct * getUserFromKey(struct llist * l, char * key)
-}
-*/
+
 void appendUserNode(struct llist * l, struct user * u1)
 {
 	//create node

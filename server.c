@@ -57,7 +57,6 @@ int main()
 					//generating temporary login key (30 chars long) to be sent to the client
 					char * key = generateLoginId(); //WARNING: key DOESN'T GET FREED! CURRENTLY MEMLEAKING! 
 					
-					
 					char * nick = copystring(message->msg2);
 					struct user * u = createUser(0,0,"",key,nick,password);
 					appendUserNode(users, u);

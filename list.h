@@ -30,6 +30,8 @@ void appendUserNode(struct llist * l, struct user * u1);
 struct lnode * getLastNode(struct llist * l, struct lnode * n);
 struct user * getUserFromKey(struct llist * l, char * key);
 struct user * getUserFromKeyEngine(char * key, struct lnode * n);
+void deleteUserNode(struct llist * l, char * key);
+void deleteUserNodeEngine(char * key, struct lnode * n, struct lnode * previous, struct llist * list);
 
 
 #endif

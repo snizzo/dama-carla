@@ -17,7 +17,9 @@ int main()
 	
 	setInterface(); //setting our program to use ncurses
 	
-	showLoginForm(); //show login form
+	struct logininfo * logindata;
+	
+	logindata = showLoginForm(); //show login form
 	
 	unsetInterface(); //unset ncurses
 	

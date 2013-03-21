@@ -6,6 +6,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "auth.h"
+
 struct logininfo{
 	char * username;
 	char * password;

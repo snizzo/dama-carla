@@ -23,6 +23,12 @@ int main()
 	
 	unsetInterface(); //unset ncurses
 	
+	printf("username: %s\n", logindata->username);
+	printf("password: %s\n", logindata->password);
+	
+	free(logindata->username);
+	free(logindata->password);
+	free(logindata);
 	
 /*	
 	struct board b;

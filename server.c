@@ -41,6 +41,18 @@ int main(int argc, char * argv[])
 				fullCommand(&net, "unauthorized", "", "", "", "");
 			}
 		
+		// COMMAND: LOGOUT
+		} else if (areEqual("logout", message->msg1)) {
+			char * loginkey = message->msg5;
+			struct user * logged = getUserFromKey(users, loginkey);
+			
+			if(logged!=NULL){
+				deleteUserNode(users,loginkey);
+				fullCommand(&net, "done", "", "", "", "");
+			} else {
+				fullCommand(&net, "unauthorized", "", "", "", "");
+			}
+		
 		// COMMAND: REGISTER <nickname> <password>
 		} else if (areEqual("register", message->msg1)) {
 			if(!isPresentRecord("users", message->msg2)){

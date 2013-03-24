@@ -26,50 +26,71 @@ int main(int argc, char * argv[])
 	me->logged = 0;
 	
 	setInterface(); //setting our program to use ncurses
-	
-	//anonymous play not supported - force user to log in
-	while(!me->logged){
-		struct logininfo * logindata = NULL;
-		
-		logindata = showLoginForm(); //show login form, login data is allocated, needs to be free
-		
-		singleWindowMessage("logging...");
-		
-		
-		fullClientCommand(&net, "login", logindata->username, logindata->password, "", "");
-		
-		struct netmessage * incoming = readClientMessage(&net);
-		
-		if (areEqual(incoming->msg1, "done")){
-			singleWindowMessage("logged!");
+	while(true){
+		//anonymous play not supported - force user to log in
+		while(!me->logged){
+			struct logininfo * logindata = NULL;
 			
-			// set up base client user account
-			me->username = copystring(logindata->username);
-			me->password = copystring(logindata->password);
-			me->loginkey = copystring(incoming->msg2);
-			me->currentgame = NULL;
-			me->logged = 1;
-			me->wins = 0;
-			me->losses = 0;
+			logindata = showLoginForm(); //show login form, login data is allocated, needs to be free
 			
-			sleep(2);
-		} else if(areEqual(incoming->msg1, "wrongpassword")) {
-			singleWindowMessage("Wrong Password!");
-			sleep(2);
+			singleWindowMessage("logging...");
 			
-		} else if(areEqual(incoming->msg1, "usernotfound")) {
-			singleWindowMessage("User Not Found!");
-			sleep(2);
 			
-		} else {
-			singleWindowMessage("Unknown Error!");
-			sleep(2);
+			fullClientCommand(&net, "login", logindata->username, logindata->password, "", "");
+			
+			struct netmessage * incoming = readClientMessage(&net);
+			
+			if (areEqual(incoming->msg1, "done")){
+				singleWindowMessage("logged!");
+				
+				// set up base client user account
+				me->username = copystring(logindata->username);
+				me->password = copystring(logindata->password);
+				me->loginkey = copystring(incoming->msg2);
+				me->currentgame = NULL;
+				me->logged = 1;
+				me->wins = 0;
+				me->losses = 0;
+				
+				sleep(2);
+			} else if(areEqual(incoming->msg1, "wrongpassword")) {
+				singleWindowMessage("Wrong Password!");
+				sleep(2);
+				
+			} else if(areEqual(incoming->msg1, "usernotfound")) {
+				singleWindowMessage("User Not Found!");
+				sleep(2);
+				
+			} else {
+				singleWindowMessage("Unknown Error!");
+				sleep(2);
+				
+			}
+			
+			free(logindata->username);
+			free(logindata->password);
+			free(logindata);
 			
 		}
 		
-		free(logindata->username);
-		free(logindata->password);
-		free(logindata);
+		int choice = showMainMenu();
+		
+		switch (choice){
+			case 0:
+				fullClientCommand(&net, "logout","","","",me->loginkey);
+				struct netmessage * incoming = readClientMessage(&net);
+				if(areEqual(incoming->msg1, "done")){
+					me->logged = 0;
+					free(me->username);
+					free(me->password);
+					free(me->loginkey);
+					me->currentgame = NULL;
+				}
+				break;
+			case 1:
+				break;
+				//join game
+		}
 		
 	}
 	

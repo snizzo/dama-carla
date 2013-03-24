@@ -17,5 +17,6 @@ void setInterface(void);
 struct logininfo * showLoginForm(void);
 void unsetInterface(void);
 void singleWindowMessage(char * message);
+int showMainMenu(void);
 
 #endif

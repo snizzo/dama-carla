@@ -102,7 +102,7 @@ void evaluateParams(int argc, char * argv[])
 		printf("Dama Carla - Online Dama Server\n");
 		printf("Port   : 2343\n");
 		printf("Author : Claudio Desideri <happy.snizzo@gmail.com>\n");
-		printf("Webiste: http://dama-carla.googlecode.com\n");
+		printf("Website: http://dama-carla.googlecode.com\n");
 		exit(0);
 	}
 }

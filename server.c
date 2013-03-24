@@ -8,8 +8,12 @@
 #include "auth.h"
 #include "list.h"
 
-int main()
+void evaluateParams(int argc, char * argv[]);
+
+int main(int argc, char * argv[])
 {	
+	
+	evaluateParams(argc, argv);
 	
 	//initializing server network
 	struct server_network net;
@@ -87,4 +91,18 @@ int main()
 	closeServerNetwork(&net);
 	
 	return EXIT_SUCCESS;
+}
+
+/*
+ * Evaluate additional lauch parameters
+ */
+void evaluateParams(int argc, char * argv[])
+{
+	if ((argc>1) && (areEqual("--help", argv[1]))){
+		printf("Dama Carla - Online Dama Server\n");
+		printf("Port   : 2343\n");
+		printf("Author : Claudio Desideri <happy.snizzo@gmail.com>\n");
+		printf("Webiste: http://dama-carla.googlecode.com\n");
+		exit(0);
+	}
 }

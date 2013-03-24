@@ -93,7 +93,7 @@ struct logininfo * showLoginForm()
 	free_field(field[0]);
 	free_field(field[1]);
 	
-	return data; //currently returning 1, maybe to refactor in future
+	return data;
 }
 
 void singleWindowMessage(char * message)

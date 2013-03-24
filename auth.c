@@ -27,9 +27,31 @@ char * generateLoginId()
 
 char * copystring(char * str)
 {
+	str = trimwhitespace(str);
 	char * copied = malloc(sizeof(char)*(strlen(str)+1));
 	strcpy(copied,str);
 	return copied;
+}
+
+char * trimwhitespace(char *str)
+{
+	char * end;
+
+	// trim leading space
+	while(isspace(*str)) str++;
+
+	if(*str == 0){  // all spaces?
+		return str;
+	}
+
+	// trim trailing space
+	end = str + strlen(str) - 1;
+	while(end > str && isspace(*end)) end--;
+
+	// write new null terminator
+	*(end+1) = 0;
+
+	return str;
 }
 
 struct user * createUser(int wins, int losses, char * gameid, char * key, char * username, char * password)

@@ -9,26 +9,65 @@
 #include "filesystem.h"
 #include "logic.h"
 #include "interface.h"
- 
-int even(int n);
+#include "client.h"
 
 int main()
 {
 	
+	struct client_network net;
+	
+	struct clientuser * me = malloc(sizeof(struct clientuser));
+	me->logged = 0;
+	
 	setInterface(); //setting our program to use ncurses
 	
-	struct logininfo * logindata;
-	
-	logindata = showLoginForm(); //show login form
+	while(!me->logged){
+		struct logininfo * logindata = NULL;
+		
+		logindata = showLoginForm(); //show login form
+		
+		singleWindowMessage("logging...");
+		
+		
+		fullClientCommand(&net, "login", logindata->username, logindata->password, "", ""); //TODO: fixme
+		
+		//fullClientCommand(&net, "login", logindata->username, logindata->password, "", ""); //TODO: fixme
+		
+		struct netmessage * incoming = readClientMessage(&net);
+		
+		if (areEqual(incoming->msg1, "done")){
+			singleWindowMessage("logged!");
+			
+			// set up base client user account
+			me->username = copystring(logindata->username);
+			me->password = copystring(logindata->password);
+			me->loginkey = copystring(incoming->msg2);
+			me->currentgame = NULL;
+			me->logged = 1;
+			me->wins = 0;
+			me->losses = 0;
+			
+			
+			
+			sleep(2); //let the user read this
+		} else if(areEqual(incoming->msg1, "wrongpassword")) {
+			singleWindowMessage("Wrong Password!");
+			sleep(2); //let the user read this
+		} else if(areEqual(incoming->msg1, "usernotfound")) {
+			singleWindowMessage("User Not Found!");
+			sleep(2); //let the user read this
+		} else {
+			singleWindowMessage("Unknown Error!");
+			sleep(2); //let the user read this
+		}
+		
+		free(logindata->username);
+		free(logindata->password);
+		free(logindata);
+		
+	}
 	
 	unsetInterface(); //unset ncurses
-	
-	printf("username: %s\n", logindata->username);
-	printf("password: %s\n", logindata->password);
-	
-	free(logindata->username);
-	free(logindata->password);
-	free(logindata);
 	
 /*	
 	struct board b;
@@ -143,6 +182,8 @@ int main()
 	return 0;
 }
 
+
+//various utils
 int even(int n) {
 	if ((n % 2)==0) {
 		return 1;

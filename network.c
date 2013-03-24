@@ -138,6 +138,14 @@ void fullCommand(struct server_network * net, char * cmd1, char * cmd2, char * c
 	sendServerMessage(net, &response);
 }
 
+
+void fullClientCommand(struct client_network * net, char * cmd1, char * cmd2, char * cmd3, char * cmd4, char * cmd5)
+{
+	struct netmessage response;
+	setNetMessage(&response, cmd1, cmd2, cmd3, cmd4, cmd5);
+	sendClientMessage(net, &response);
+}
+
 int areEqual(char * s1, char * s2)
 {
 	if (strcmp(s1, s2)==0){

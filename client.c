@@ -47,8 +47,6 @@ int main()
 			me->wins = 0;
 			me->losses = 0;
 			
-			
-			
 			sleep(2); //let the user read this
 		} else if(areEqual(incoming->msg1, "wrongpassword")) {
 			singleWindowMessage("Wrong Password!");

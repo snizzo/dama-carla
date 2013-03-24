@@ -96,6 +96,15 @@ struct logininfo * showLoginForm()
 	return data; //currently returning 1, maybe to refactor in future
 }
 
+void singleWindowMessage(char * message)
+{
+	clear();
+	refresh();
+	mvprintw(5, 10, message);
+	refresh();
+}
+
+
 void unsetInterface()
 {
 	endwin();

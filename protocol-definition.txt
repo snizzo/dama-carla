@@ -13,3 +13,7 @@ RESPONSE:	done
 COMMAND:	authping <> <> <> <loginkey>
 RESPONSE:	pong <username>
 			unauthorized
+
+COMMAND:	logout <> <> <> <loginkey>
+RESPONSE:	done
+			unauthorized

@@ -96,6 +96,38 @@ struct logininfo * showLoginForm()
 	return data;
 }
 
+/*
+ * returns:
+ * 0: logout
+ * 1: join game
+ */
+int showMainMenu()
+{
+	clear();
+	refresh();
+	int ch;
+	
+	mvprintw(2, 10, "DAMA CARLA v0.1");
+	mvprintw(4, 10, "J  : join a game");
+	mvprintw(6, 10, "Q  : logout");
+	refresh();
+	
+	/* Loop through to get user requests */
+	while(1)
+	{	
+		ch = getch();
+		
+		switch(ch)
+		{	
+			case 'q': //logout
+				return 0;
+			
+			case 'j':      //join a game
+				return 1;
+		}
+	}
+}
+
 void singleWindowMessage(char * message)
 {
 	clear();

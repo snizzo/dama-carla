@@ -5,7 +5,8 @@ CFLAGS=-g -Weverything
 all:
 	$(CC) $(CFLAGS) -o client client.c $(SOURCES) $(LIBS)
 	$(CC) $(CFLAGS) -o server server.c $(SOURCES) $(LIBS)
-	
+	$(CC) $(CFLAGS) -o logic logic.c
+       
 clean:
 	rm client
 	rm server
@@ -16,3 +17,4 @@ server:
 
 client:
 	$(CC) $(CFLAGS) -o client client.c $(SOURCES) $(LIBS)
+

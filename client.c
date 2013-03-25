@@ -12,9 +12,12 @@
 #include "client.h"
 
 void evaluateParams(int argc, char * argv[]);
+int setBox(struct board * b);
+int even(int n);
 
 int main(int argc, char * argv[])
 {
+	
 	//evaluating additional parameters
 	evaluateParams(argc,argv);
 	
@@ -97,6 +100,7 @@ int main(int argc, char * argv[])
 	unsetInterface(); //unset ncurses
 	
 	return 0;
+  
 }
 
 /*
@@ -134,8 +138,49 @@ void evaluateParams(int argc, char * argv[])
 			exit(0);
 		}
 	}
+}
 	
+/* qui inizia il mio codice xD (che funziona, se vuoi provarlo, basta togliere l'ultima parentesi prima di questa riga xD)
+	 
+	 struct board b;
+	 
+	 for (int i=0;i<8;i++){
+		for (int j=0;j<8;j++){
+			b.data[i][j] = 0;
+		}
+	}
+	 
+	 b.data[0][7] = 1;
+	 b.data[0][5] = 1;
+	 b.data[0][3] = 1;
+	 b.data[0][1] = 1;
+	 
+	 b.data[1][6] = 2;
+	 b.data[1][4] = 2;
+	 b.data[1][2] = 2;
+	 b.data[1][0] = 2;
 	
+	 b.data[2][7] = 1;
+   	 b.data[2][5] = 1;
+	 b.data[2][3] = 2;
+	 b.data[2][1] = 2;
+	
+	 b.data[7][6] = 3;
+	 b.data[7][4] = 3;
+	 b.data[7][2] = 3;
+	 b.data[7][0] = 3;
+	
+	 b.data[5][6] = 4;
+	 b.data[5][4] = 4;
+	 b.data[5][2] = 4;
+	 b.data[5][0] = 4;
+	
+	 b.data[6][7] = 3;
+	 b.data[6][5] = 3;
+	 b.data[6][3] = 4;
+	 b.data[6][1] = 4;
+	 
+	setBox(&b);
 }
 
 //various utils
@@ -147,3 +192,74 @@ int even(int n) {
 	}
 }
 
+
+	 
+int setBox(struct board * b) {
+	initscr(); 
+	start_color();
+	init_pair(1,COLOR_WHITE,COLOR_WHITE);
+	init_pair(2,COLOR_WHITE,COLOR_BLACK);
+	init_pair(3,COLOR_MAGENTA,COLOR_BLACK);
+	for (int a=0; a<8; a++) {
+		for (int c=0; c<8; c++) {
+		 int k=a*3;
+		 int l=c*5;
+		 if (b->data[a][c]==1) {
+			 attron(COLOR_PAIR(2));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+			 mvprintw(k+1, l+2, "O");
+		 } else if (b->data[a][c]==2) {
+			 attron(COLOR_PAIR(2));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+			 mvprintw(k+1, l+2, "@");
+		 } else if (b->data[a][c]==3) {
+			 attron(COLOR_PAIR(3));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+			 mvprintw(k+1, l+2, "O");
+		 } else if (b->data[a][c]==4) {
+			 attron(COLOR_PAIR(3));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+			 mvprintw(k+1, l+2, "@");
+		 } else if (even(a+c)) {
+			 attron(COLOR_PAIR(1));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+		 } else {
+			 attron(COLOR_PAIR(2));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+		 }
+	 }
+ }
+		 
+		 
+		 
+     refresh(); 
+     getch(); 
+     endwin();
+     return 0; 
+ }
+
+*/

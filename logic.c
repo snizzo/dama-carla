@@ -18,10 +18,12 @@ int main()
 	printf("INFO: setting all initial board...");
 	
 	setAllBoardEmpty(&b);
+	printBoard(&b);
 	
 	printf("done!\n");
 	
 	prepareBoard(&b);
+	printBoard(&b);
 	
 	canMove( &b, 1);
 	
@@ -36,9 +38,9 @@ int main()
 
 void prepareBoard( struct board * b )
 {
-	b->data[0][7] = 3;
-	b->data[0][5] = 3;
-	b->data[0][3] = 3;
+	b->data[0][7] = 0;
+	b->data[0][5] = 0;
+	b->data[0][3] = 0;
 	b->data[0][1] = 0;
 	
 	b->data[1][6] = 0;
@@ -47,23 +49,23 @@ void prepareBoard( struct board * b )
 	b->data[1][0] = 0;
 	
 	b->data[2][7] = 0;
-	b->data[2][5] = 3;
-	b->data[2][3] = 3;
+	b->data[2][5] = 0;
+	b->data[2][3] = 0;
 	b->data[2][1] = 0;
 	
 	b->data[7][6] = 0;
-	b->data[7][4] = 1;
+	b->data[7][4] = 0;
 	b->data[7][2] = 0;
-	b->data[7][0] = 1;
+	b->data[7][0] = 0;
 	
-	b->data[5][6] = 1;
+	b->data[5][6] = 0;
 	b->data[5][4] = 0;
-	b->data[5][2] = 1;
+	b->data[5][2] = 0;
 	b->data[5][0] = 0;
 	
 	b->data[6][7] = 0;
-	b->data[6][5] = 1;
-	b->data[6][3] = 1;
+	b->data[6][5] = 0;
+	b->data[6][3] = 0;
 	b->data[6][1] = 0;
 
 }

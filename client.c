@@ -139,9 +139,9 @@ void evaluateParams(int argc, char * argv[])
 		}
 	}
 }
-	
-/* qui inizia il mio codice xD (che funziona, se vuoi provarlo, basta togliere l'ultima parentesi prima di questa riga xD)
-	 
+
+ //qui inizia il mio codice xD (che funziona, se vuoi provarlo, basta togliere l'ultima parentesi prima di questa riga xD)
+	 /*
 	 struct board b;
 	 
 	 for (int i=0;i<8;i++){
@@ -195,7 +195,23 @@ int even(int n) {
 
 	 
 int setBox(struct board * b) {
-	initscr(); 
+	initscr();
+	mvprintw(1, 42, "8"); 
+	mvprintw(4, 42, "7"); 
+	mvprintw(7, 42, "6"); 
+	mvprintw(10, 42, "5"); 
+	mvprintw(13, 42, "4"); 
+	mvprintw(16, 42, "3"); 
+	mvprintw(19, 42, "2"); 
+	mvprintw(22, 42, "1"); 
+	mvprintw(25, 2, "a"); 
+	mvprintw(25, 7, "b"); 
+	mvprintw(25, 12, "c"); 
+	mvprintw(25, 17, "d"); 
+	mvprintw(25, 22, "e"); 
+	mvprintw(25, 27, "f"); 
+	mvprintw(25, 32, "g"); 
+	mvprintw(25, 37, "h"); 
 	start_color();
 	init_pair(1,COLOR_WHITE,COLOR_WHITE);
 	init_pair(2,COLOR_WHITE,COLOR_BLACK);
@@ -252,9 +268,7 @@ int setBox(struct board * b) {
 			 }
 		 }
 	 }
- }
-		 
-		 
+ }		 
 		 
      refresh(); 
      getch(); 

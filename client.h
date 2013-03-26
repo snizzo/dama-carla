@@ -11,6 +11,16 @@ struct clientuser {
 	int losses;
 };
 
+struct moveinfo{
+	char * da;
+	char * a;
+};
+
 int even(int n);
+void evaluateParams(int argc, char * argv[]);
+int setBox(struct board * b);
+int even(int n);
+struct moveinfo * takeMove();
+struct moveinfo * takeMove(struct board * b);
 
 #endif

@@ -7,6 +7,17 @@ void setInterface()
 	cbreak();
 	noecho();
 	keypad(stdscr, TRUE);
+	start_color();
+	}
+
+void allBlack() {
+	for (int i=0; i<=COLS; i++) {
+		for (int j=0; j<=LINES; j++) {
+			init_pair(1,COLOR_BLACK,COLOR_BLACK);
+			attron(COLOR_PAIR(1));
+			mvprintw(i, j, "");
+		}
+	}
 }
 
 struct logininfo * showLoginForm()

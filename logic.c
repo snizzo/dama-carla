@@ -10,6 +10,7 @@
 /*
  * This main will be ripped off in the future.
  */
+ /*
 int main()
 {
 	
@@ -18,12 +19,10 @@ int main()
 	printf("INFO: setting all initial board...");
 	
 	setAllBoardEmpty(&b);
-	printBoard(&b);
 	
 	printf("done!\n");
 	
 	prepareBoard(&b);
-	printBoard(&b);
 	
 	canMove( &b, 1);
 	
@@ -35,7 +34,7 @@ int main()
 	
 	return 0;
 }
-
+*/
 void prepareBoard( struct board * b )
 {
 	b->data[0][7] = 0;

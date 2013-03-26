@@ -1,4 +1,4 @@
-SOURCES=network_data.c network.c filesystem.c auth.c list.c interface.c
+SOURCES=network_data.c network.c filesystem.c auth.c list.c interface.c logic.c
 LIBS=-lncurses -lform
 CC=clang
 CFLAGS=-g -Weverything

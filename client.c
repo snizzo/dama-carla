@@ -11,13 +11,13 @@
 #include "interface.h"
 #include "client.h"
 
-void evaluateParams(int argc, char * argv[]);
-int setBox(struct board * b);
-int even(int n);
+
 
 int main(int argc, char * argv[])
-{
-	
+{	
+	setInterface();
+	void allBlack();
+	/*
 	//evaluating additional parameters
 	evaluateParams(argc,argv);
 	
@@ -102,10 +102,10 @@ int main(int argc, char * argv[])
 	return 0;
   
 }
-
+*/
 /*
  * Evaluate additional lauch parameters
- */
+ */ /*
 void evaluateParams(int argc, char * argv[])
 {
 	if ((argc>1) && (areEqual("--help", argv[1]))){
@@ -139,9 +139,9 @@ void evaluateParams(int argc, char * argv[])
 		}
 	}
 }
-
+*/
  //qui inizia il mio codice xD (che funziona, se vuoi provarlo, basta togliere l'ultima parentesi prima di questa riga xD)
-	 /*
+	 
 	 struct board b;
 	 
 	 for (int i=0;i<8;i++){
@@ -180,7 +180,10 @@ void evaluateParams(int argc, char * argv[])
 	 b.data[6][3] = 4;
 	 b.data[6][1] = 4;
 	 
-	setBox(&b);
+	struct moveinfo * move = takeMove(&b);
+	unsetInterface();
+	
+	printf ("%s - %s", move->da, move->a);
 }
 
 //various utils
@@ -192,10 +195,30 @@ int even(int n) {
 	}
 }
 
+ 
+ struct moveinfo * takeMove(struct board * b)
+{
+	FIELD * field[3];
+	FORM  * my_form;
+	int ch;
+	
+	/* Initialize the fields */
+	field[0] = new_field(1, 2, 3, 52, 0, 0);
+	field[1] = new_field(1, 2, 5, 52, 0, 0);
+	field[2] = NULL;
+	
+	/* Set field options */
+	set_field_back(field[0], A_UNDERLINE); 	/* Print a line for the option 	*/
+	field_opts_off(field[0], O_AUTOSKIP);  	/* Don't go to next field when this */
+						/* Field is filled up 		*/
+	set_field_back(field[1], A_UNDERLINE); 
+	field_opts_off(field[1], O_AUTOSKIP);
 
-	 
-int setBox(struct board * b) {
-	initscr();
+	/* Create the form and post it */
+	my_form = new_form(field);
+	post_form(my_form);
+	refresh();
+	
 	mvprintw(1, 42, "8"); 
 	mvprintw(4, 42, "7"); 
 	mvprintw(7, 42, "6"); 
@@ -211,8 +234,7 @@ int setBox(struct board * b) {
 	mvprintw(25, 22, "e"); 
 	mvprintw(25, 27, "f"); 
 	mvprintw(25, 32, "g"); 
-	mvprintw(25, 37, "h"); 
-	start_color();
+	mvprintw(25, 37, "h");
 	init_pair(1,COLOR_WHITE,COLOR_WHITE);
 	init_pair(2,COLOR_WHITE,COLOR_BLACK);
 	init_pair(3,COLOR_MAGENTA,COLOR_BLACK);
@@ -268,12 +290,71 @@ int setBox(struct board * b) {
 			 }
 		 }
 	 }
- }		 
-		 
-     refresh(); 
-     getch(); 
-     endwin();
-     return 0; 
  }
-
-*/
+ 
+	init_pair(4,COLOR_WHITE,COLOR_BLACK);
+	attron(COLOR_PAIR(4));
+ 
+	mvprintw(1, 50, "Inserisci la tua prossima mossa");
+	mvprintw(3, 49, "da:");
+	mvprintw(5, 49, "a:");
+	refresh();
+	
+	int exitCond = 0;
+	
+	/* Loop through to get user requests */
+	while(!exitCond)
+	{	
+		ch = getch();
+		
+		switch(ch)
+		{	
+			case '\n':
+				exitCond = 1;
+				break;
+			
+			case KEY_BACKSPACE:
+				/* if backspace is hit, a char disappear*/
+				form_driver(my_form, REQ_DEL_PREV);
+				break;
+			
+			case KEY_DOWN:
+				/* Go to next field */
+				form_driver(my_form, REQ_NEXT_FIELD);
+				/* Go to the end of the present buffer */
+				/* Leaves nicely at the last character */
+				form_driver(my_form, REQ_END_LINE);
+				break;
+			case KEY_UP:
+				/* Go to previous field */
+				form_driver(my_form, REQ_PREV_FIELD);
+				form_driver(my_form, REQ_END_LINE);
+				break;
+			default:
+				/* If this is a normal character, it gets */
+				/* Printed				  */	
+				form_driver(my_form, ch);
+				break;
+		}
+	}
+	
+	/* in any case, this small fix is needed in order to get data */
+	form_driver(my_form, REQ_PREV_FIELD);
+	form_driver(my_form, REQ_END_LINE);
+	
+	char * da = field_buffer(field[0],0);
+	char * a = field_buffer(field[1],0);
+	
+	struct moveinfo * data = malloc(sizeof(struct moveinfo));
+	
+	data->da = copystring(da);
+	data->a = copystring(a);
+	
+	/* Un post form and free the memory */
+	unpost_form(my_form);
+	free_form(my_form);
+	free_field(field[0]);
+	free_field(field[1]);
+	
+	return data;
+}

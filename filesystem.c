@@ -29,7 +29,7 @@ char * buildFilePath(char * str1, char * str2)
  */
 struct token * getTokens(char * record)
 {
-	struct token * t; = (struct token *) malloc(sizeof(struct token));
+	struct token * t = (struct token *) malloc(sizeof(struct token));
 	
 	char * pos;
 	char * key = strtok_r(record, "|", &pos);

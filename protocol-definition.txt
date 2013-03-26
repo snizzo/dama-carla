@@ -17,3 +17,11 @@ RESPONSE:	pong <username>
 COMMAND:	logout <> <> <> <loginkey>
 RESPONSE:	done
 			unauthorized
+
+COMMAND:	join <> <> <> <loginkey>
+RESPONSE:	wait
+			ready <gamekey>
+
+COMMAND:	waiting <> <> <> <loginkey>
+RESPONSE:	wait
+			ready <gamekey>

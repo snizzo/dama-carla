@@ -66,3 +66,13 @@ struct user * createUser(int wins, int losses, char * gameid, char * key, char *
 	
 	return u;
 }
+
+struct game * createGame(char * key, char * white, char * black)
+{
+	struct game * g = malloc(sizeof(struct game)*1);
+	g->key = key;
+	g->white = white;
+	g->black = black;
+	
+	return g;
+}

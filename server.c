@@ -7,6 +7,7 @@
 #include "filesystem.h"
 #include "auth.h"
 #include "list.h"
+#include "logic.h"
 
 void evaluateParams(int argc, char * argv[]);
 
@@ -20,7 +21,10 @@ int main(int argc, char * argv[])
 	openServerNetwork(&net);
 	
 	struct llist * users = createList();
+	struct llist * games = createList();
 	
+	//player waiting for other player to connect
+	struct user * waiting = NULL;
 	
 	while(net.incoming)
 	{
@@ -49,6 +53,42 @@ int main(int argc, char * argv[])
 			if(logged!=NULL){
 				deleteUserNode(users,loginkey);
 				fullCommand(&net, "done", "", "", "", "");
+			} else {
+				fullCommand(&net, "unauthorized", "", "", "", "");
+			}
+		
+		// COMMAND: JOIN
+		} else if (areEqual("join", message->msg1)) {
+			char * loginkey = message->msg5;
+			struct user * logged = getUserFromKey(users, loginkey);
+			
+			
+			if(logged!=NULL){
+				//TODO: check if logged is already in a game
+				struct game * found = getGameFromPlayer(games, logged->key);
+				if(found!=NULL){
+					fullCommand(&net, "ready", found->key, "", "", "");
+					continue;
+				}
+				
+				if(waiting==NULL){
+					waiting = logged;
+					fullCommand(&net, "wait", "", "", "", "");
+				} else {
+					if(waiting!=logged){
+						//spawn a new game
+						char * gameid = generateLoginId();
+						struct game * g = createGame(gameid, logged->key, waiting->key);
+						
+						appendGameNode(games, g);
+						
+						waiting = NULL;
+						
+						fullCommand(&net, "ready", gameid, "", "", "");
+					} else {
+						fullCommand(&net, "wait", "", "", "", "");
+					}
+				}
 			} else {
 				fullCommand(&net, "unauthorized", "", "", "", "");
 			}

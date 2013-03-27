@@ -23,4 +23,6 @@ int even(int n);
 struct moveinfo * takeMove();
 struct moveinfo * takeMove(struct board * b);
 
+char * joinGame(struct client_network * net, struct clientuser * me);
+
 #endif

@@ -125,3 +125,129 @@ void appendUserNode(struct llist * l, struct user * u1)
 		last->next = node;
 	}
 }
+//--------------------------------------GAME LIST
+
+void appendGameNode(struct llist * l, struct game * g1)
+{
+	//create node
+	struct lnode * node = malloc(sizeof(struct lnode)*1);
+	node->d.g = g1;
+	node->next = NULL;
+	
+	//append node to last node of the list
+	struct lnode * last = getLastNode(l, NULL);
+	
+	if (last==NULL){ //if list is empty
+		l->first = node;
+	} else {
+		last->next = node;
+	}
+}
+
+struct game * getGameFromPlayer(struct llist * l, char * key)
+{
+	if (l->first==NULL){
+		return NULL;
+	} else {
+		return getGameFromPlayerEngine(key, l->first);
+	}
+}
+
+
+struct game * getGameFromPlayerEngine(char * key, struct lnode * n)
+{
+	if (n->d.g!=NULL){
+		//perform search
+		if(areEqual(n->d.g->white,key) || areEqual(n->d.g->black,key)){
+			return n->d.g; //this is the right node
+		} else {
+			if (n->next!=NULL){
+				return getGameFromPlayerEngine(key, n->next); //search in the next
+			} else {
+				return NULL; //not found here
+			}
+		}
+	} else {
+		return NULL;
+		//empty node: critical errors!!
+		//FIXME: maybe automatic whiping...
+	}
+
+}
+
+struct game * getGameFromKey(struct llist * l, char * key)
+{
+	if (l->first==NULL){
+		return NULL;
+	} else {
+		return getGameFromKeyEngine(key, l->first);
+	}
+}
+
+struct game * getGameFromKeyEngine(char * key, struct lnode * n)
+{
+	if (n->d.g!=NULL){
+		//perform search
+		if(areEqual(n->d.g->key,key)){
+			return n->d.g; //this is the right node
+		} else {
+			if (n->next!=NULL){
+				return getGameFromKeyEngine(key, n->next); //search in the next
+			} else {
+				return NULL; //not found here
+			}
+		}
+	} else {
+		return NULL;
+		//empty node: critical errors!!
+		//FIXME: maybe automatic whiping...
+	}
+
+}
+
+void deleteGameNode(struct llist * l, char * key)
+{
+	deleteGameNodeEngine(key, l->first, NULL, l); //key, current, previous, linked list
+}
+
+void deleteGameNodeEngine(char * key, struct lnode * n, struct lnode * previous, struct llist * list)
+{
+	if(areEqual(n->d.g->key, key)){ // if this is the key to be deleted, delete it
+	
+		if(previous==NULL){ // this node is the first of the list
+			
+			if(n->next==NULL){ 		//there's no next node
+				list->first = NULL; //first node of linked list does not exist
+				free(n->d.g); //free user structure
+				free(n); 		//free entire node 
+			} else {
+				list->first = n->next; //first node of linked list does not exist
+				free(n->d.g); //free user structure
+				free(n); 		//free entire node
+				//there is next node. This next node will become the new first node
+			}
+			
+		} else {
+			
+			if(n->next==NULL){
+				//this node is alone. Just free it and remove reference.
+				previous->next = NULL;
+				free(n->d.g); //free user structure
+				free(n); 		//free entire node
+			} else {
+				previous->next = n->next;
+				free(n->d.g); //free user structure
+				free(n); 		//free entire node
+			}
+			
+		}
+		
+	} else { // if this is not the right node, go ahead
+	
+		if (n->next!=NULL) {
+			deleteGameNodeEngine(key, n->next, n, list);
+		}
+		
+	}
+
+}

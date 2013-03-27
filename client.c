@@ -17,7 +17,63 @@ int main(int argc, char * argv[])
 {	
 	setInterface();
 	void allBlack();
-	/*
+	
+	
+	
+	
+	/*########################################################*/
+	//UGLINESS
+	
+	 //qui inizia il mio codice xD (che funziona, se vuoi provarlo, basta togliere l'ultima parentesi prima di questa riga xD)
+	 
+	 struct board b;
+	 
+	 for (int i=0;i<8;i++){
+		for (int j=0;j<8;j++){
+			b.data[i][j] = 0;
+		}
+	}
+	 
+	 b.data[0][7] = 1;
+	 b.data[0][5] = 1;
+	 b.data[0][3] = 1;
+	 b.data[0][1] = 1;
+	 
+	 b.data[1][6] = 2;
+	 b.data[1][4] = 2;
+	 b.data[1][2] = 2;
+	 b.data[1][0] = 2;
+	
+	 b.data[2][7] = 1;
+   	 b.data[2][5] = 1;
+	 b.data[2][3] = 2;
+	 b.data[2][1] = 2;
+	
+	 b.data[7][6] = 3;
+	 b.data[7][4] = 3;
+	 b.data[7][2] = 3;
+	 b.data[7][0] = 3;
+	
+	 b.data[5][6] = 4;
+	 b.data[5][4] = 4;
+	 b.data[5][2] = 4;
+	 b.data[5][0] = 4;
+	
+	 b.data[6][7] = 3;
+	 b.data[6][5] = 3;
+	 b.data[6][3] = 4;
+	 b.data[6][1] = 4;
+	 
+	struct moveinfo * move = takeMove(&b);
+	unsetInterface();
+	
+	printf ("%s - %s", move->da, move->a);
+	/*########################################################*/
+	
+	
+	
+	
+	
 	//evaluating additional parameters
 	evaluateParams(argc,argv);
 	
@@ -28,7 +84,6 @@ int main(int argc, char * argv[])
 	struct clientuser * me = malloc(sizeof(struct clientuser));
 	me->logged = 0;
 	
-	setInterface(); //setting our program to use ncurses
 	while(true){
 		//anonymous play not supported - force user to log in
 		while(!me->logged){
@@ -79,7 +134,7 @@ int main(int argc, char * argv[])
 		int choice = showMainMenu();
 		
 		switch (choice){
-			case 0:
+			case 0: //logout
 				fullClientCommand(&net, "logout","","","",me->loginkey);
 				struct netmessage * incoming = readClientMessage(&net);
 				if(areEqual(incoming->msg1, "done")){
@@ -90,10 +145,14 @@ int main(int argc, char * argv[])
 					me->currentgame = NULL;
 				}
 				break;
-			case 1:
+			case 1: //join game
+				singleWindowMessage("Waiting for player...");
+				char * gameid = joinGame(&net, me);
+				singleWindowMessage("Game Found!");
+				sleep(4);
 				break;
-				//join game
 		}
+		break;
 		
 	}
 	
@@ -102,10 +161,28 @@ int main(int argc, char * argv[])
 	return 0;
   
 }
-*/
+/*
+ * Wait for a game and connect.
+ */
+char * joinGame(struct client_network * net, struct clientuser * me)
+{
+	
+	while(1){
+		fullClientCommand(net, "join","","","",me->loginkey);
+		struct netmessage * incoming = readClientMessage(net);
+		
+		if(areEqual(incoming->msg1, "ready")){
+			return incoming->msg2;
+		} else {
+			sleep(1);
+		}
+	}
+	
+}
+
 /*
  * Evaluate additional lauch parameters
- */ /*
+ */
 void evaluateParams(int argc, char * argv[])
 {
 	if ((argc>1) && (areEqual("--help", argv[1]))){
@@ -138,52 +215,6 @@ void evaluateParams(int argc, char * argv[])
 			exit(0);
 		}
 	}
-}
-*/
- //qui inizia il mio codice xD (che funziona, se vuoi provarlo, basta togliere l'ultima parentesi prima di questa riga xD)
-	 
-	 struct board b;
-	 
-	 for (int i=0;i<8;i++){
-		for (int j=0;j<8;j++){
-			b.data[i][j] = 0;
-		}
-	}
-	 
-	 b.data[0][7] = 1;
-	 b.data[0][5] = 1;
-	 b.data[0][3] = 1;
-	 b.data[0][1] = 1;
-	 
-	 b.data[1][6] = 2;
-	 b.data[1][4] = 2;
-	 b.data[1][2] = 2;
-	 b.data[1][0] = 2;
-	
-	 b.data[2][7] = 1;
-   	 b.data[2][5] = 1;
-	 b.data[2][3] = 2;
-	 b.data[2][1] = 2;
-	
-	 b.data[7][6] = 3;
-	 b.data[7][4] = 3;
-	 b.data[7][2] = 3;
-	 b.data[7][0] = 3;
-	
-	 b.data[5][6] = 4;
-	 b.data[5][4] = 4;
-	 b.data[5][2] = 4;
-	 b.data[5][0] = 4;
-	
-	 b.data[6][7] = 3;
-	 b.data[6][5] = 3;
-	 b.data[6][3] = 4;
-	 b.data[6][1] = 4;
-	 
-	struct moveinfo * move = takeMove(&b);
-	unsetInterface();
-	
-	printf ("%s - %s", move->da, move->a);
 }
 
 //various utils
@@ -234,7 +265,8 @@ int even(int n) {
 	mvprintw(25, 22, "e"); 
 	mvprintw(25, 27, "f"); 
 	mvprintw(25, 32, "g"); 
-	mvprintw(25, 37, "h");
+	mvprintw(25, 37, "h"); 
+
 	init_pair(1,COLOR_WHITE,COLOR_WHITE);
 	init_pair(2,COLOR_WHITE,COLOR_BLACK);
 	init_pair(3,COLOR_MAGENTA,COLOR_BLACK);
@@ -290,8 +322,7 @@ int even(int n) {
 			 }
 		 }
 	 }
- }
- 
+ }		 
 	init_pair(4,COLOR_WHITE,COLOR_BLACK);
 	attron(COLOR_PAIR(4));
  

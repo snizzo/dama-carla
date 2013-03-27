@@ -5,10 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-struct token {
-	char key[100];
-	char value[100];
-};
+#include "structs.h"
 
 int isPresentRecord(char * set, char * record);
 int saveRecord(char * set, char * record, char * value);

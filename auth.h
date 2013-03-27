@@ -5,20 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 
-struct user {
-	int wins;
-	int losses;
-	char * gameid;
-	char * key;
-	char * username;
-	char * password;
-};
-
-struct game {
-	char * key;
-	char * white;
-	char * black;
-};
+#include "structs.h"
 
 //standard header inclusion
 char * generateLoginId(void);

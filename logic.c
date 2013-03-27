@@ -6,8 +6,6 @@
 
 #include "logic.h"
 
-#include "client.h"
-
 
 /*
  * This main will be ripped off in the future.
@@ -347,8 +345,49 @@ int canBkingCapt( struct board * b, int i, int j )				//può la dama nera mangia
  * e il giocatore ha selezionato la giusta casella per mangiare, modifica la board e il turno finisce, se una delle due
  * condizioni non è soddisfatta dice "devi mangiare per forza, rifai la mossa"; move funzionerà in modo simile
  */
-void nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per scontato che la casella di partenza e quella di
-{																			//arrivo appartengano alla board
+void nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scontato che la casella di partenza e quella di
+{
+	
+	int i = 8 - atoi(move->daL);
+	int j = 0;
+	if (areEqual(move->daC, "a")) {
+		j = 0;
+	} else if (areEqual(move->daC, "b")) {
+		j = 1;
+	} else if (areEqual(move->daC, "c")) {
+		j = 2;
+	} else if (areEqual(move->daC, "d")) {
+		j = 3;
+	} else if (areEqual(move->daC, "e")) {
+		j = 4;
+	} else if (areEqual(move->daC, "f")) {
+		j = 5;
+	} else if (areEqual(move->daC, "g")) {
+		j = 6;
+	} else if (areEqual(move->daC, "h")) {
+		j = 7;
+	}
+				
+	int k = 8 - atoi(move->aL);
+	int l = 0;
+	if (areEqual(move->aC, "a")) {
+		l = 0;
+	} else if (areEqual(move->aC, "b")) {
+		l = 1;
+	} else if (areEqual(move->aC, "c")) {
+		l = 2;
+	} else if (areEqual(move->aC, "d")) {
+		l = 3;
+	} else if (areEqual(move->aC, "e")) {
+		l = 4;
+	} else if (areEqual(move->aC, "f")) {
+		l = 5;
+	} else if (areEqual(move->aC, "g")) {
+		l = 6;
+	} else if (areEqual(move->aC, "h")) {
+		l = 7;
+	}
+																				//arrivo appartengano alla board
 	if (m==1) {																//gioca il bianco
 		if ((b->data[i][j]==1 || b->data[i][j]==2) && b->data[k][l]==0) {
 			int c = 0;

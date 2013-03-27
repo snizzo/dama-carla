@@ -35,6 +35,7 @@ int movement( struct board * b, int i, int j, int k, int l);
 int capture( struct board *b, int i, int j, int k, int l);
 void changeBoard( struct board * b, int i, int j,int c);
 void mirrorBoard( struct board * b);
+void printAfterMove(struct board * b);
 
 
 

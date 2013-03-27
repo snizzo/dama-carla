@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
 //specific lib inclusion
 #include "network_data.h"
 #include "network.h"
@@ -15,64 +16,23 @@
 
 int main(int argc, char * argv[])
 {	
+	
 	setInterface();
 	void allBlack();
 	
+	struct board b;
 	
-	
-	
-	/*########################################################*/
-	//UGLINESS
-	
-	 //qui inizia il mio codice xD (che funziona, se vuoi provarlo, basta togliere l'ultima parentesi prima di questa riga xD)
-	 
-	 struct board b;
-	 
-	 for (int i=0;i<8;i++){
-		for (int j=0;j<8;j++){
-			b.data[i][j] = 0;
-		}
-	}
-	 
-	 b.data[0][7] = 1;
-	 b.data[0][5] = 1;
-	 b.data[0][3] = 1;
-	 b.data[0][1] = 1;
-	 
-	 b.data[1][6] = 2;
-	 b.data[1][4] = 2;
-	 b.data[1][2] = 2;
-	 b.data[1][0] = 2;
-	
-	 b.data[2][7] = 1;
-   	 b.data[2][5] = 1;
-	 b.data[2][3] = 2;
-	 b.data[2][1] = 2;
-	
-	 b.data[7][6] = 3;
-	 b.data[7][4] = 3;
-	 b.data[7][2] = 3;
-	 b.data[7][0] = 3;
-	
-	 b.data[5][6] = 4;
-	 b.data[5][4] = 4;
-	 b.data[5][2] = 4;
-	 b.data[5][0] = 4;
-	
-	 b.data[6][7] = 3;
-	 b.data[6][5] = 3;
-	 b.data[6][3] = 4;
-	 b.data[6][1] = 4;
+	setAllBoardEmpty(&b);
+	prepareBoard(&b);
 	 
 	struct moveinfo * move = takeMove(&b);
 	unsetInterface();
 	
-	printf ("%s - %s", move->da, move->a);
-	/*########################################################*/
 	
+//	printf ("%s - %s - %s - %s", move->daC, move->daL, move->aC, move->aL);
+		
 	
-	
-	
+	/*
 	
 	//evaluating additional parameters
 	evaluateParams(argc,argv);
@@ -163,7 +123,7 @@ int main(int argc, char * argv[])
 }
 /*
  * Wait for a game and connect.
- */
+ */ /*
 char * joinGame(struct client_network * net, struct clientuser * me)
 {
 	
@@ -182,7 +142,7 @@ char * joinGame(struct client_network * net, struct clientuser * me)
 
 /*
  * Evaluate additional lauch parameters
- */
+ */ /*
 void evaluateParams(int argc, char * argv[])
 {
 	if ((argc>1) && (areEqual("--help", argv[1]))){
@@ -214,7 +174,7 @@ void evaluateParams(int argc, char * argv[])
 			printf("feel free to report a bug to http://dama-carla.googlecode.com\n");
 			exit(0);
 		}
-	}
+	}  */
 }
 
 //various utils
@@ -229,14 +189,16 @@ int even(int n) {
  
  struct moveinfo * takeMove(struct board * b)
 {
-	FIELD * field[3];
+	FIELD * field[5];
 	FORM  * my_form;
 	int ch;
 	
 	/* Initialize the fields */
-	field[0] = new_field(1, 2, 3, 52, 0, 0);
-	field[1] = new_field(1, 2, 5, 52, 0, 0);
-	field[2] = NULL;
+	field[0] = new_field(1, 1, 3, 52, 0, 0);
+	field[1] = new_field(1, 1, 3, 54, 0, 0);
+	field[2] = new_field(1, 1, 5, 52, 0, 0);
+	field[3] = new_field(1, 1, 5, 54, 0, 0);
+	field[4] = NULL;
 	
 	/* Set field options */
 	set_field_back(field[0], A_UNDERLINE); 	/* Print a line for the option 	*/
@@ -244,6 +206,12 @@ int even(int n) {
 						/* Field is filled up 		*/
 	set_field_back(field[1], A_UNDERLINE); 
 	field_opts_off(field[1], O_AUTOSKIP);
+	
+	set_field_back(field[2], A_UNDERLINE); 
+	field_opts_off(field[2], O_AUTOSKIP);
+	
+	set_field_back(field[3], A_UNDERLINE); 
+	field_opts_off(field[3], O_AUTOSKIP);
 
 	/* Create the form and post it */
 	my_form = new_form(field);
@@ -326,7 +294,7 @@ int even(int n) {
 	init_pair(4,COLOR_WHITE,COLOR_BLACK);
 	attron(COLOR_PAIR(4));
  
-	mvprintw(1, 50, "Inserisci la tua prossima mossa");
+	mvprintw(1, 49, "Inserisci la tua prossima mossa");
 	mvprintw(3, 49, "da:");
 	mvprintw(5, 49, "a:");
 	refresh();
@@ -373,19 +341,77 @@ int even(int n) {
 	form_driver(my_form, REQ_PREV_FIELD);
 	form_driver(my_form, REQ_END_LINE);
 	
-	char * da = field_buffer(field[0],0);
-	char * a = field_buffer(field[1],0);
+	char * daC = field_buffer(field[0],0);
+	char * daL = field_buffer(field[1],0);
+	char * aC = field_buffer(field[2],0);
+	char * aL = field_buffer(field[3],0);
 	
 	struct moveinfo * data = malloc(sizeof(struct moveinfo));
 	
-	data->da = copystring(da);
-	data->a = copystring(a);
+	data->daC = copystring(daC);
+	data->daL = copystring(daL);
+	data->aC = copystring(aC);
+	data->aL = copystring(aL);
+	
+	int i = 8 - atoi(data->daL);
+	int j;
+	if (strcmp(data->daC, "a")==0) {
+					j = 0;
+				} else if (strcmp(data->daC, "b")==0) {
+					j = 1;
+				} else if (strcmp(data->daC, "c")==0) {
+					j = 2;
+				} else if (strcmp(data->daC, "d")==0) {
+					j = 3;
+				} else if (strcmp(data->daC, "e")==0) {
+					j = 4;
+				} else if (strcmp(data->daC, "f")==0) {
+					j = 5;
+				} else if (strcmp(data->daC, "g")==0) {
+					j = 6;
+				} else if (strcmp(data->daC, "h")==0) {
+					j = 7;
+				}
+				
+	int k = 8 - atoi(data->aL);
+	int l;
+	if (strcmp(data->aC, "a")==0) {
+					l = 0;
+				} else if (strcmp(data->aC, "b")==0) {
+					l = 1;
+				} else if (strcmp(data->aC, "c")==0) {
+					l = 2;
+				} else if (strcmp(data->aC, "d")==0) {
+					l = 3;
+				} else if (strcmp(data->aC, "e")==0) {
+					l = 4;
+				} else if (strcmp(data->aC, "f")==0) {
+					l = 5;
+				} else if (strcmp(data->aC, "g")==0) {
+					l = 6;
+				} else if (strcmp(data->aC, "h")==0) {
+					l = 7;
+				}
+					
 	
 	/* Un post form and free the memory */
 	unpost_form(my_form);
 	free_form(my_form);
 	free_field(field[0]);
 	free_field(field[1]);
+	free_field(field[2]);
+	free_field(field[3]);
+/*
+	printf("  ");     //deubg
+	printf("%d", i);
+	printf("%d", + j);
+	printf("%d", + k);
+	printf("%d", + l);
+*/			
+	nextMove( &b, i, j, k, l, 1);
+	
+	struct moveinfo * move = takeMove(b);
+	
 	
 	return data;
 }

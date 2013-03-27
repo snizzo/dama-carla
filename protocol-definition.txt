@@ -21,3 +21,13 @@ RESPONSE:	done
 COMMAND:	join <> <> <> <loginkey>
 RESPONSE:	wait
 			ready <gamekey>
+
+COMMAMD:	move <from> <to> <gameid> <loginkey>
+RESPONSE:	accepted
+			notvalid
+
+COMMAND:	opponent <> <> <gameid> <loginkey>
+RESPONSE:	thinking
+			yourmove
+			gamewon
+			gamelost

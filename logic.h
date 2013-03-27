@@ -6,7 +6,9 @@
 #define LOGIC_H
 
 #include <stdio.h>
-
+#include <stdlib.h>
+#include "structs.h"
+#include "network.h"
 
 //data board values:
 //	0	: empty
@@ -14,11 +16,7 @@
 //	3   : black checker (pedina)
 //	2   : white king
 //	4   : black king
-struct board{
-	int data[8][8];
-};
 
-void nextMove( struct board * b, int i, int j, int k, int l, int m );
 void prepareBoard( struct board * b );
 void printBoard( struct board * b );
 void setAllBoardEmpty( struct board * b );
@@ -36,7 +34,7 @@ int capture( struct board *b, int i, int j, int k, int l);
 void changeBoard( struct board * b, int i, int j,int c);
 void mirrorBoard( struct board * b);
 void printAfterMove(struct board * b);
-
+void nextMove( struct board * b, struct moveinfo * d, int m );
 
 
 #endif

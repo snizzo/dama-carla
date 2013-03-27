@@ -8,11 +8,6 @@
 
 #include "auth.h"
 
-struct logininfo{
-	char * username;
-	char * password;
-};
-
 void setInterface(void);
 struct logininfo * showLoginForm(void);
 void unsetInterface(void);

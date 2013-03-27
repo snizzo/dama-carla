@@ -12,8 +12,10 @@ struct clientuser {
 };
 
 struct moveinfo{
-	char * da;
-	char * a;
+	char * daC;
+	char * daL;
+	char * aC;
+	char * aL;
 };
 
 int even(int n);

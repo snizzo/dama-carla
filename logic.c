@@ -6,6 +6,8 @@
 
 #include "logic.h"
 
+#include "client.h"
+
 
 /*
  * This main will be ripped off in the future.
@@ -37,35 +39,35 @@ int main()
 */
 void prepareBoard( struct board * b )
 {
-	b->data[0][7] = 0;
-	b->data[0][5] = 0;
-	b->data[0][3] = 0;
-	b->data[0][1] = 0;
+	b->data[0][7] = 3;
+	b->data[0][5] = 3;
+	b->data[0][3] = 3;
+	b->data[0][1] = 3;
 	
-	b->data[1][6] = 0;
-	b->data[1][4] = 0;
-	b->data[1][2] = 0;
-	b->data[1][0] = 0;
+	b->data[1][6] = 3;
+	b->data[1][4] = 3;
+	b->data[1][2] = 3;
+	b->data[1][0] = 3;
 	
-	b->data[2][7] = 0;
-	b->data[2][5] = 0;
-	b->data[2][3] = 0;
-	b->data[2][1] = 0;
+	b->data[2][7] = 3;
+	b->data[2][5] = 3;
+	b->data[2][3] = 3;
+	b->data[2][1] = 3;
 	
-	b->data[7][6] = 0;
-	b->data[7][4] = 0;
-	b->data[7][2] = 0;
-	b->data[7][0] = 0;
+	b->data[7][6] = 1;
+	b->data[7][4] = 1;
+	b->data[7][2] = 1;
+	b->data[7][0] = 1;
 	
-	b->data[5][6] = 0;
-	b->data[5][4] = 0;
-	b->data[5][2] = 0;
-	b->data[5][0] = 0;
+	b->data[5][6] = 1;
+	b->data[5][4] = 1;
+	b->data[5][2] = 1;
+	b->data[5][0] = 1;
 	
-	b->data[6][7] = 0;
-	b->data[6][5] = 0;
-	b->data[6][3] = 0;
-	b->data[6][1] = 0;
+	b->data[6][7] = 1;
+	b->data[6][5] = 1;
+	b->data[6][3] = 1;
+	b->data[6][1] = 1;
 
 }
 
@@ -345,7 +347,7 @@ int canBkingCapt( struct board * b, int i, int j )				//può la dama nera mangia
  * e il giocatore ha selezionato la giusta casella per mangiare, modifica la board e il turno finisce, se una delle due
  * condizioni non è soddisfatta dice "devi mangiare per forza, rifai la mossa"; move funzionerà in modo simile
  */
-int nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per scontato che la casella di partenza e quella di
+void nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per scontato che la casella di partenza e quella di
 {																			//arrivo appartengano alla board
 	if (m==1) {																//gioca il bianco
 		if ((b->data[i][j]==1 || b->data[i][j]==2) && b->data[k][l]==0) {
@@ -368,7 +370,6 @@ int nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per s
 			}
 		} else {
 			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
-			return -1;
 		}
 	} else {																//gioca il nero
 		if ((b->data[i][j]==3 || b->data[i][j]==4) && b->data[k][l]==0) {
@@ -387,12 +388,10 @@ int nextMove( struct board * b, int i, int j, int k, int l, int m )		//dà per s
 			}
 		} else {
 			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
-			return -1;
 		}
 	}
-	return 55;							//impossibile che si attivi ma fa sparire il warning che altrimenti non so come farlo xD
-}										//visto che è inutile dare 1 quando si attiva capture o move perchè anche quelle
-										//potrebbero fallire
+	
+}
 
 int movement( struct board * b, int i, int j, int k, int l)
 {

@@ -26,6 +26,10 @@ int main(int argc, char * argv[])
 	prepareBoard(&b);
 	 
 	struct moveinfo * move = takeMove(&b);
+	printAfterMove(&b);
+	
+	sleep(5);
+	
 	unsetInterface();
 	
 	
@@ -408,10 +412,86 @@ int even(int n) {
 	printf("%d", + k);
 	printf("%d", + l);
 */			
-	nextMove( &b, i, j, k, l, 1);
-	
-	struct moveinfo * move = takeMove(b);
+	nextMove( b, i, j, k, l, 1);
 	
 	
 	return data;
+}
+
+void printAfterMove(struct board * b) {
+	refresh();
+	mvprintw(1, 42, "8"); 
+	mvprintw(4, 42, "7"); 
+	mvprintw(7, 42, "6"); 
+	mvprintw(10, 42, "5"); 
+	mvprintw(13, 42, "4"); 
+	mvprintw(16, 42, "3"); 
+	mvprintw(19, 42, "2"); 
+	mvprintw(22, 42, "1"); 
+	mvprintw(25, 2, "a"); 
+	mvprintw(25, 7, "b"); 
+	mvprintw(25, 12, "c"); 
+	mvprintw(25, 17, "d"); 
+	mvprintw(25, 22, "e"); 
+	mvprintw(25, 27, "f"); 
+	mvprintw(25, 32, "g"); 
+	mvprintw(25, 37, "h"); 
+
+	init_pair(1,COLOR_WHITE,COLOR_WHITE);
+	init_pair(2,COLOR_WHITE,COLOR_BLACK);
+	init_pair(3,COLOR_MAGENTA,COLOR_BLACK);
+	for (int a=0; a<8; a++) {
+		for (int c=0; c<8; c++) {
+		 int k=a*3;
+		 int l=c*5;
+		 if (b->data[a][c]==1) {
+			 attron(COLOR_PAIR(2));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+			 mvprintw(k+1, l+2, "O");
+		 } else if (b->data[a][c]==2) {
+			 attron(COLOR_PAIR(2));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+			 mvprintw(k+1, l+2, "@");
+		 } else if (b->data[a][c]==3) {
+			 attron(COLOR_PAIR(3));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+			 mvprintw(k+1, l+2, "O");
+		 } else if (b->data[a][c]==4) {
+			 attron(COLOR_PAIR(3));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+			 mvprintw(k+1, l+2, "@");
+		 } else if (even(a+c)) {
+			 attron(COLOR_PAIR(1));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+		 } else {
+			 attron(COLOR_PAIR(2));
+			 for (int i=k; i<k+3; i++) {
+				 for (int j=l; j<l+5; j++) {
+					 mvprintw(i, j, " ");
+				 }
+			 }
+		 }
+	 }
+ }
+ refresh();
 }

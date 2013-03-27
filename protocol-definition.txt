@@ -21,7 +21,3 @@ RESPONSE:	done
 COMMAND:	join <> <> <> <loginkey>
 RESPONSE:	wait
 			ready <gamekey>
-
-COMMAND:	waiting <> <> <> <loginkey>
-RESPONSE:	wait
-			ready <gamekey>

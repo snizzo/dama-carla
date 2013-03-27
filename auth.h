@@ -15,7 +15,7 @@ struct user {
 };
 
 struct game {
-	char * id;
+	char * key;
 	char * white;
 	char * black;
 };
@@ -23,6 +23,7 @@ struct game {
 //standard header inclusion
 char * generateLoginId(void);
 struct user * createUser(int wins, int losses, char * gameid, char * key, char * username, char * password);
+struct game * createGame(char * key, char * white, char * black);
 char * copystring(char * str);
 char * trimwhitespace(char *str);
 #endif

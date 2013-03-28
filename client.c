@@ -17,15 +17,42 @@ int main(int argc, char * argv[])
 	
 	setAllBoardEmpty(&b);
 	prepareBoard(&b);
-	 
-	struct moveinfo * move = takeMove(&b);
 	
-	nextMove( &b, move, 1);
-	
-	printAfterMove(&b);
-	
-	sleep(5);
-	
+	while(true){
+		//bianca
+		struct moveinfo * move = takeMove(&b);
+		
+		if(nextMove( &b, move, 1)==-1){
+			singleWindowMessage("Mossa illegale!");
+			sleep(1);
+		}
+		
+		clear();
+		refresh();
+		printAfterMove(&b);
+		
+		free(move->daC);
+		free(move->aC);
+		free(move->daL);
+		free(move->aL);
+		
+		//nera
+		struct moveinfo * moveblack = takeMove(&b);
+		
+		if(nextMove( &b, moveblack, 2)==-1){
+			singleWindowMessage("Mossa illegale!");
+			sleep(1);
+		}
+		
+		clear();
+		refresh();
+		printAfterMove(&b);
+		
+		free(moveblack->daC);
+		free(moveblack->aC);
+		free(moveblack->daL);
+		free(moveblack->aL);
+	}
 	
 //	printf ("%s - %s - %s - %s", move->daC, move->daL, move->aC, move->aL);
 		
@@ -300,6 +327,8 @@ struct moveinfo * takeMove(struct board * b)
 }
 
 void printAfterMove(struct board * b) {
+	init_pair(4,COLOR_WHITE,COLOR_BLACK);
+	attron(COLOR_PAIR(4));
 	mvprintw(1, 42, "8"); 
 	mvprintw(4, 42, "7"); 
 	mvprintw(7, 42, "6"); 

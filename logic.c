@@ -172,15 +172,15 @@ int canBlackMove( struct board * b, int i, int j )				//può la pedina nera muov
 int canBlackCapt( struct board * b, int i, int j)						//può la pedina nera mangiare?
 {
 	if (j==0) {
-		if ((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) {
+		if ((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) {
 			return 1;
 		}
 	} else if (j==7) {
-		if ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) {
+		if ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) {
 			return 1;
 		}
 	} else {
-		if (((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) || ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+		if (((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) || ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0)) {
 			return 1;
 		}
 	}
@@ -344,8 +344,12 @@ int canBkingCapt( struct board * b, int i, int j )				//può la dama nera mangia
  * promemoria: capture controlla se una delle pedine che possono mangiare è quella selezionata dal giocatore. se lo è
  * e il giocatore ha selezionato la giusta casella per mangiare, modifica la board e il turno finisce, se una delle due
  * condizioni non è soddisfatta dice "devi mangiare per forza, rifai la mossa"; move funzionerà in modo simile
+ * 
+ * torna 1 se tutto bene,
+ * torna -1 se tutto sbagliato
+ * 
  */
-void nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scontato che la casella di partenza e quella di
+int nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scontato che la casella di partenza e quella di
 {
 	
 	int i = 8 - atoi(move->daL);
@@ -393,40 +397,57 @@ void nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scon
 			int c = 0;
 			for (int d=0;d<8;d++){
 				for (int e=0;e<8;e++){
-					if (canWhiteCapt(b, d, e)==1 || canWkingCapt(b, d, e)==1) {
-						c++;
+					if (b->data[d][e]==1) {
+						if (canWhiteCapt(b, d, e)==1) {
+							c++;
+						}
+					} else if (b->data[d][e]==2) {
+						if (canWkingCapt(b, d, e)==1) {
+							c++;
+						}
 					}
 				}
 			}
 			if (c>0) {
 				capture(b, i, j, k, l);										//la riga successiva è la mangiata multipla
-				
+				return 1;
 					//serve un nuovo input del giocatore che decide in che casella andare per mangiare,
 					//a quel punto si richiama capture(b, k, l, (input del giocatore), (input del giocatore))
 				
 			} else {
 				movement(b, i, j, k, l);
+				return 1;
 			}
 		} else {
 			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
+			return -1;
 		}
 	} else {																//gioca il nero
 		if ((b->data[i][j]==3 || b->data[i][j]==4) && b->data[k][l]==0) {
 			int c = 0;
 			for (int d=0;d<8;d++){
 				for (int e=0;e<8;e++){
-					if (canBlackCapt(b, d, e)==1 || canWkingCapt(b, d, e)==1) {
-						c++;
+					if (b->data[d][e]==3) {
+						if (canBlackCapt(b, d, e)==1) {
+							c++;
+						}
+					} else if (b->data[d][e]==4){
+						if(canBkingCapt(b, d, e)==1){
+							c++;
+						}
 					}
 				}
 			}
 			if (c>0) {
 				capture(b, i, j, k, l);
+				return 1;
 			} else {
 				movement(b, i, j, k, l);
+				return 1;
 			}
 		} else {
 			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
+			return -1;
 		}
 	}
 	
@@ -501,7 +522,7 @@ int capture( struct board *b, int i, int j, int k, int l)
 			return -1;
 		}
 	} else if (b->data[i][j]==3 && i==k-2 && (l==j-2 || l==j+2)) {
-		if (b->data[(i+k)/2][(j+l)/2]==3 || b->data[(i+k)/2][(j+l)/2]==4) {
+		if (b->data[(i+k)/2][(j+l)/2]==1 || b->data[(i+k)/2][(j+l)/2]==2) {
 			changeBoard(b, i, j, 0);
 			changeBoard(b, (i+k)/2, (j+l)/2, 0);
 			changeBoard(b, k, l, 3);
@@ -510,8 +531,8 @@ int capture( struct board *b, int i, int j, int k, int l)
 			printf ("mossa non consentita\n");
 			return -1;
 		}
-	} else if (b->data[i][j]==2 && (i==k+2 || i==k-2) && (j==l-2 || j==l+2)) {
-		if (b->data[(i+k)/2][(j+l)/2]==3 || b->data[(i+k)/2][(j+l)/2]==4) {
+	} else if (b->data[i][j]==4 && (i==k+2 || i==k-2) && (j==l-2 || j==l+2)) {
+		if (b->data[(i+k)/2][(j+l)/2]==1 || b->data[(i+k)/2][(j+l)/2]==2) {
 			changeBoard(b, i, j, 0);
 			changeBoard(b, (i+k)/2, (j+l)/2, 0);
 			changeBoard(b, k, l, 4);

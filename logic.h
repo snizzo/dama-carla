@@ -22,19 +22,20 @@ void printBoard( struct board * b );
 void setAllBoardEmpty( struct board * b );
 int canMove ( struct board * b, int m);
 int canWhiteMove( struct board * b, int i, int j );
-int canWhiteCapt( struct board * b, int i, int j );
+int canWhiteCapt( struct board * b, int i, int j, int k, int l );
 int canBlackMove( struct board * b, int i, int j );
-int canBlackCapt( struct board * b, int i, int j );
+int canBlackCapt( struct board * b, int i, int j, int k, int l  );
 int canWkingMove( struct board * b, int i, int j );
-int canWkingCapt( struct board * b, int i, int j );
+int canWkingCapt( struct board * b, int i, int j, int k, int l  );
 int canBkingMove( struct board * b, int i, int j );
-int canBkingCapt( struct board * b, int i, int j );
+int canBkingCapt( struct board * b, int i, int j, int k, int l  );
 int movement( struct board * b, int i, int j, int k, int l);
 int capture( struct board *b, int i, int j, int k, int l);
 void changeBoard( struct board * b, int i, int j,int c);
 void mirrorBoard( struct board * b);
 void printAfterMove(struct board * b);
 int nextMove( struct board * b, struct moveinfo * d, int m );
+int notCapturable (int k, int l);
 
 
 #endif

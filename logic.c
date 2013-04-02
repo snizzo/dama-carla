@@ -74,7 +74,7 @@ int canMove ( struct board * b, int m)
 		for (int d=0;d<8;d++){
 			for (int e=0;e<8;e++){
 				if (b->data[d][e]==1) {
-					if ((canWhiteMove(b, d, e)==1) || ((canWhiteCapt(b, d, e, d-1, e-1)==1) || (canWhiteCapt(b, d, e, d-1, e+1)==1))) {
+					if ((canWhiteMove(b, d, e)==1) || ((canWhiteCapt(b, e, d-1, e-1)==1) || (canWhiteCapt(b, e, d-1, e+1)==1))) {
 						c++;
 					}
 				} else if (b->data[d][e]==2) {
@@ -90,7 +90,7 @@ int canMove ( struct board * b, int m)
 		for (int d=0;d<8;d++){
 			for (int e=0;e<8;e++){
 				if (b->data[d][e]==3) {
-					if ((canBlackMove(b, d, e)==1) || ((canBlackCapt(b, d, e, d+1, e-1)==1) || (canBlackCapt(b, d, e, d+1, e+1)==1))) {
+					if ((canBlackMove(b, d, e)==1) || ((canBlackCapt(b, e, d+1, e-1)==1) || (canBlackCapt(b, e, d+1, e+1)==1))) {
 						c++;
 					}
 				} else if (b->data[d][e]==4) {
@@ -129,20 +129,20 @@ int canWhiteMove( struct board * b, int i, int j )				//può la pedina bianca mu
 	return -1;
 }
 
-int canWhiteCapt( struct board * b, int i, int j, int k, int l)						//può la pedina bianca mangiare?
+int canWhiteCapt( struct board * b, int j, int k, int l)						//può la pedina bianca mangiare?
 {
 	if (notCapturable(k, l)==1) {
 		return -1;
 	} else if (j==0) {
-		if ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) {
+		if ((b->data[k][l]==3 || b->data[k][l]==4) && b->data[k-1][l+1]==0) {
 			return 1;
 		}
 	} else if (j==7) {
-		if ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0) {
+		if ((b->data[k][l]==3 || b->data[k][l]==4) && b->data[k-1][l-1]==0) {
 			return 1;
 		}
 	} else {
-		if (((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) || ((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+		if ((b->data[k][l]==3 || b->data[k][l]==4) && b->data[k-1][l+(l-j)]==0) {
 			return 1;
 		}
 	}
@@ -167,20 +167,20 @@ int canBlackMove( struct board * b, int i, int j )				//può la pedina nera muov
 	return -1;
 }
 
-int canBlackCapt( struct board * b, int i, int j, int k, int l)						//può la pedina nera mangiare?
+int canBlackCapt( struct board * b, int j, int k, int l)						//può la pedina nera mangiare?
 {
 	if (notCapturable(k, l)==1) {
 		return -1;
 	} else if (j==0) {
-		if ((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) {
+		if ((b->data[k][l]==1 || b->data[k][l]==2) && b->data[k+1][l+1]==0) {
 			return 1;
 		}
 	} else if (j==7) {
-		if ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) {
+		if ((b->data[k][l]==1 || b->data[k][l]==2) && b->data[k+1][l-1]==0) {
 			return 1;
 		}
 	} else {
-		if (((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) || ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0)) {
+		if ((b->data[k][l]==1 || b->data[k][l]==2) && b->data[k+1][l+(l-j)]==0) {
 			return 1;
 		}
 	}
@@ -226,38 +226,31 @@ int canWkingCapt( struct board * b, int i, int j, int k, int l)				//può la dam
 	if (notCapturable(k, l)==1) {
 		return -1;
 	} else if (i==0 && j==7) {
-		if ((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) {
+		if ((b->data[k][l]==3 || b->data[k][l]==4) && b->data[k+1][l-1]==0) {
 			return 1;
 		}
 	} else if (i==7 && j==0) {
-		if ((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) {
+		if ((b->data[k][l]==3 || b->data[k][l]==4) && b->data[k-1][l+1]==0) {
 			return 1;
 		}
 	} else if (i==0) {
-		if (((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
-			((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0)) {
+		if ((b->data[k][l]==3 || b->data[k][l]==4) && b->data[k+1][l+(l-j)]==0) {
 				return 1;
 		}
 	} else if (i==7) {
-		if (((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) ||
-			((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+		if ((b->data[k][l]==3 || b->data[k][l]==4) && b->data[k-1][l+(l-j)]==0) {
 				return 1;
 		}
 	} else if (j==0) {
-		if (((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
-			((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0)) {
+		if ((b->data[k][l]==3 || b->data[k][l]==4) && b->data[k+(k-i)][l+1]==0) {
 				return 1;
 		}
 	} else if (j==7) {
-		if (((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) ||
-			((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+		if ((b->data[k][l]==3 || b->data[k][l]==4) && b->data[k+(k-i)][l-1]==0) {
 				return 1;
 		}
 	} else {
-		if (((b->data[i+1][j+1]==3 || b->data[i+1][j+1]==4) && b->data[i+2][j+2]==0) ||
-			((b->data[i+1][j-1]==3 || b->data[i+1][j-1]==4) && b->data[i+2][j-2]==0) ||
-			((b->data[i-1][j+1]==3 || b->data[i-1][j+1]==4) && b->data[i-2][j+2]==0) ||
-			((b->data[i-1][j-1]==3 || b->data[i-1][j-1]==4) && b->data[i-2][j-2]==0)) {
+		if ((b->data[k][l]==3 || b->data[k][l]==4) && b->data[k+(k-i)][l+(l-j)]==0) {
 				return 1;
 		}
 	}
@@ -303,38 +296,31 @@ int canBkingCapt( struct board * b, int i, int j, int k, int l)				//può la dam
 	if (notCapturable(k, l)==1) {
 		return -1;
 	} else if (i==0 && j==7) {
-		if ((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) {
+		if ((b->data[k][l]==1 || b->data[k][l]==2) && b->data[k+1][l-1]==0) {
 			return 1;
 		}
 	} else if (i==7 && j==0) {
-		if ((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0) {
+		if ((b->data[k][l]==1 || b->data[k][l]==2) && b->data[k-1][l+1]==0) {
 			return 1;
 		}
 	} else if (i==0) {
-		if (((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
-			((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0)) {
+		if ((b->data[k][l]==1 || b->data[k][l]==2) && b->data[k+1][l+(l-j)]==0) {
 				return 1;
 		}
 	} else if (i==7) {
-		if (((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0) ||
-			((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+		if ((b->data[k][l]==1 || b->data[k][l]==2) && b->data[k-1][l+(l-j)]==0) {
 				return 1;
 		}
 	} else if (j==0) {
-		if (((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
-			((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0)) {
+		if ((b->data[k][l]==1 || b->data[k][l]==2) && b->data[k+(k-i)][l+1]==0) {
 				return 1;
 		}
 	} else if (j==7) {
-		if (((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) ||
-			((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+		if ((b->data[k][l]==1 || b->data[k][l]==2) && b->data[k+(k-i)][l-1]==0) {
 				return 1;
 		}
 	} else {
-		if (((b->data[i+1][j+1]==1 || b->data[i+1][j+1]==2) && b->data[i+2][j+2]==0) ||
-			((b->data[i+1][j-1]==1 || b->data[i+1][j-1]==2) && b->data[i+2][j-2]==0) ||
-			((b->data[i-1][j+1]==1 || b->data[i-1][j+1]==2) && b->data[i-2][j+2]==0) ||
-			((b->data[i-1][j-1]==1 || b->data[i-1][j-1]==2) && b->data[i-2][j-2]==0)) {
+		if ((b->data[k][l]==1 || b->data[k][l]==2) && b->data[k+(k-i)][l+(l-j)]==0) {
 				return 1;
 		}
 	}
@@ -402,7 +388,7 @@ int nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scont
 			for (int d=0;d<8;d++){
 				for (int e=0;e<8;e++){
 					if (b->data[d][e]==1) {
-						if ((canWhiteCapt(b, d, e, d-1, e-1)==1) || (canWhiteCapt(b, d, e, d-1, e+1)==1)) {
+						if ((canWhiteCapt(b, e, d-1, e-1)==1) || (canWhiteCapt(b, e, d-1, e+1)==1)) {
 							c++;
 						}
 					} else if (b->data[d][e]==2) {
@@ -433,7 +419,7 @@ int nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scont
 			for (int d=0;d<8;d++){
 				for (int e=0;e<8;e++){
 					if (b->data[d][e]==3) {
-						if ((canBlackCapt(b, d, e, d+1, e-1)==1) || (canBlackCapt(b, d, e, d+1, e+1)==1)) {
+						if ((canBlackCapt(b, e, d+1, e-1)==1) || (canBlackCapt(b, e, d+1, e+1)==1)) {
 							c++;
 						}
 					} else if (b->data[d][e]==4){

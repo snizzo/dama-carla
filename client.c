@@ -14,7 +14,7 @@ int main(int argc, char * argv[])
 	setInterface();
 	
 	//set everything to use black/white, in case terminal colors are different
-	allBlack();
+	//allBlack();
 	
 	//evaluating additional parameters
 	evaluateParams(argc,argv);

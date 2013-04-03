@@ -115,13 +115,18 @@ int main(int argc, char * argv[])
 int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 {
 	int color = 0;
+	int opp = 0;
 	
 	fullClientCommand(net, "opponent","","",gameid,me->loginkey);
 	struct netmessage * incoming = readClientMessage(net);
 	if(areEqual(incoming->msg1, "thinking")){
 		color = 2;
+		opp = 1;
+		singleWindowMessage("You have blacks!");
 	} else if(areEqual(incoming->msg1, "yourmove")){
 		color = 1;
+		opp = 2;
+		singleWindowMessage("You have whites!");
 	}
 	
 	//preparing board
@@ -141,11 +146,58 @@ int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 			
 		//tocca a te, fai la mossa
 		} else if (areEqual(incoming->msg1, "yourmove")) {
+			//perfoming locally opponent move
+			if(strlen(incoming->msg2)>0){
+				struct moveinfo * tempmove = malloc(sizeof(struct moveinfo));
+				
+				tempmove->daC = fromCharToPChar(incoming->msg2[0]);
+				tempmove->daL = fromCharToPChar(incoming->msg2[1]);
+				tempmove->aC = fromCharToPChar(incoming->msg2[2]);
+				tempmove->aL = fromCharToPChar(incoming->msg2[3]);
+				
+				int lol = nextMove( &b, tempmove, opp);
+								
+				if(lol==-1){
+					singleWindowMessage("failed to set opponent move!");
+				}
+				clear();
+				refresh();
+				if (color==1) {
+					printWhiteBoard(&b);
+				} else {
+					printBlackBoard(&b);
+				}
+				
+				free(tempmove->daC);
+				free(tempmove->aC);
+				free(tempmove->daL);
+				free(tempmove->aL);
+				free(tempmove);
+			} else {
+				singleWindowMessage("failed to retrieve opponent move!!");
+			}
+			
 			struct moveinfo * move = takeMove(&b);
 			
-			while(nextMove( &b, move, color)==-1){
-				singleWindowMessage("Mossa illegale!");
-				sleep(1);
+			char m[5];
+			m[0] = move->daC[0];
+			m[1] = move->daL[0];
+			m[2] = move->aC[0];
+			m[3] = move->aL[0];
+			m[4] = 0; //string terminator
+			
+			fullClientCommand(net, "move",m,"",gameid,me->loginkey);
+			incoming = readClientMessage(net);
+			
+			int exitCond2 = 0;
+			
+			while(!exitCond2){
+				if(nextMove( &b, move, color)==-1){
+					singleWindowMessage("Mossa illegale!");
+					sleep(1);
+				} else {
+					exitCond2 = 1;
+				}
 			}
 			
 			clear();
@@ -153,7 +205,7 @@ int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 			if (color==1) {
 				printWhiteBoard(&b);
 			} else {
-				printBlackBoard;
+				printBlackBoard(&b);
 			}
 			
 			free(move->daC);
@@ -191,6 +243,18 @@ char * joinGame(struct client_network * net, struct clientuser * me)
 		}
 	}
 	
+}
+
+/*
+ * Convert from char to char *
+ */
+char * fromCharToPChar(char p)
+{
+	char * s = malloc(2);
+	s[0] = p;
+	s[1] = 0;
+	
+	return s;
 }
 
 /*

@@ -13,5 +13,6 @@
 void evaluateParams(int argc, char * argv[]);
 char * joinGame(struct client_network * net, struct clientuser * me);
 int playGame(struct client_network * net, char * gameid, struct clientuser * me);
+char * fromCharToPChar(char p);
 
 #endif

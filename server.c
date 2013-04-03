@@ -57,6 +57,85 @@ int main(int argc, char * argv[])
 				fullCommand(&net, "unauthorized", "", "", "", "");
 			}
 		
+		/*
+		 * This one is useful to retrieve game information
+		 */
+		// COMMAND: OPPONENT
+		} else if (areEqual("opponent", message->msg1)) {
+			char * loginkey = message->msg5;
+			struct user * logged = getUserFromKey(users, loginkey);
+			
+			
+			if(logged!=NULL){
+				//TODO: check if logged is already in a game
+				struct game * found = getGameFromPlayer(games, logged->key);
+				if(found!=NULL){
+					if(found->status==1 && areEqual(found->white, logged->key)){
+						if(found->lastmove!=NULL){						
+							fullCommand(&net, "yourmove", found->lastmove, "", "", "");
+						} else {
+							fullCommand(&net, "yourmove", "", "", "", "");
+						}
+					} else if(found->status==1 && areEqual(found->black, logged->key)){
+						fullCommand(&net, "thinking", "", "", "", "");
+					} else if(found->status==2 && areEqual(found->white, logged->key)){
+						fullCommand(&net, "thinking", "", "", "", "");
+					} else if(found->status==2 && areEqual(found->black, logged->key)){
+						if(found->lastmove!=NULL){
+							fullCommand(&net, "yourmove", found->lastmove, "", "", "");
+						} else {
+							fullCommand(&net, "yourmove", "", "", "", "");
+						}
+					} else if(found->status==3 && areEqual(found->white, logged->key)){
+						fullCommand(&net, "gamewon", "", "", "", "");
+					} else if(found->status==4 && areEqual(found->black, logged->key)){
+						fullCommand(&net, "gamewon", "", "", "", "");
+					} else if(found->status==3 && areEqual(found->black, logged->key)){
+						fullCommand(&net, "gamelost", "", "", "", "");
+					} else if(found->status==4 && areEqual(found->white, logged->key)){
+						fullCommand(&net, "gamelost", "", "", "", "");
+					}
+					continue;
+				} else {
+					fullCommand(&net, "gamenotfound", "", "", "", "");
+				}
+			} else {
+				fullCommand(&net, "unauthorized", "", "", "", "");
+			}
+		
+		// COMMAND: MOVE
+		} else if (areEqual("move", message->msg1)) {
+			char * loginkey = message->msg5;
+			struct user * logged = getUserFromKey(users, loginkey);
+			
+			char * move = message->msg2;
+			
+			
+			if(logged!=NULL){
+				//TODO: check if logged is already in a game
+				struct game * found = getGameFromPlayer(games, logged->key);
+				if(found!=NULL){
+					
+					printf("performing move for player\n" );
+					printf("status: %i\n", found->status);
+					printf("move: %s\n", move);
+					free(found->lastmove);
+					found->lastmove = copystring(move);
+					
+					if(found->status==1){
+						found->status = 2;
+					} else if(found->status==2){
+						found->status = 1;
+					}
+					
+					fullCommand(&net, "accepted", "", "", "", "");
+				} else {
+					fullCommand(&net, "gamenotfound", "", "", "", "");
+				}
+			} else {
+				fullCommand(&net, "unauthorized", "", "", "", "");
+			}
+		
 		// COMMAND: JOIN
 		} else if (areEqual("join", message->msg1)) {
 			char * loginkey = message->msg5;

@@ -6,29 +6,6 @@
 
 #include "logic.h"
 
-
-/*
- * This main will be ripped off in the future.
- */
- /*
-int main()
-{
-	
-	struct board b;
-	
-	setAllBoardEmpty(&b);
-	
-	prepareBoard(&b);
-	
-	canMove( &b, 1);
-	
-	nextMove(&b, 3, 2, 1, 4, 1);
-
-	printBoard(&b);
-	
-	return 0;
-}
-*/
 void prepareBoard( struct board * b )
 {
 	b->data[0][7] = 3;
@@ -336,7 +313,7 @@ int canBkingCapt( struct board * b, int i, int j, int k, int l)				//può la dam
  * condizioni non è soddisfatta dice "devi mangiare per forza, rifai la mossa"; move funzionerà in modo simile
  * 
  * torna 1 se tutto bene,
- * torna -1 se tutto sbagliato
+ * torna -1 se sbagliato
  * 
  */
 int nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scontato che la casella di partenza e quella di
@@ -566,23 +543,6 @@ int notCapturable (int k, int l) {
 		return 1;
 	} else {
 		return 0;
-	}
-}
-
-void mirrorBoard( struct board * b)				//da modificare in base a come funzionerà il client
-{
-	int a[8][8];
-	for (int i=0;i<8;i++){
-		for (int j=0;j<8;j++){
-			a[i][j]=b->data[7-i][7-j];
-		}
-	}
-	printf ("\n\n");
-	for (int i=0;i<8;i++){							//print per debug
-		for (int j=0;j<8;j++){
-			printf ("%i ", a[i][j]);
-		}
-		printf ("\n");
 	}
 }
 

@@ -7,7 +7,6 @@
 #include <stdlib.h>
 
 #include "auth.h"
-#include "logic.h"
 
 void setInterface(void);
 struct logininfo * showLoginForm(void);

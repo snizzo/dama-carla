@@ -181,7 +181,7 @@ struct moveinfo * takeMove(struct board * b)
 	post_form(my_form);
 	refresh();
 	
-	printAfterMove(b);
+	printWhiteBoard(b);
 			 
 	init_pair(4,COLOR_WHITE,COLOR_BLACK);
 	attron(COLOR_PAIR(4));
@@ -344,7 +344,12 @@ void printWhiteBoard(struct board * b) {
 }
 
 void printBlackBoard(struct board * b) {
-	struct board d = mirrorBoard(b);
+	int vettore[8][8];
+	for (int i=0;i<8;i++){
+		for (int j=0;j<8;j++){
+			vettore[i][j]=b->data[7-i][7-j];
+		}
+	}
 	init_pair(4,COLOR_WHITE,COLOR_BLACK);
 	attron(COLOR_PAIR(4));
 	mvprintw(1, 42, "1"); 
@@ -371,7 +376,7 @@ void printBlackBoard(struct board * b) {
 		for (int c=0; c<8; c++) {
 		 int k=a*3;
 		 int l=c*5;
-		 if (d->data[a][c]==1) {
+		 if (vettore[a][c]==1) {
 			 attron(COLOR_PAIR(2));
 			 for (int i=k; i<k+3; i++) {
 				 for (int j=l; j<l+5; j++) {
@@ -379,7 +384,7 @@ void printBlackBoard(struct board * b) {
 				 }
 			 }
 			 mvprintw(k+1, l+2, "O");
-		 } else if (d->data[a][c]==2) {
+		 } else if (vettore[a][c]==2) {
 			 attron(COLOR_PAIR(2));
 			 for (int i=k; i<k+3; i++) {
 				 for (int j=l; j<l+5; j++) {
@@ -387,7 +392,7 @@ void printBlackBoard(struct board * b) {
 				 }
 			 }
 			 mvprintw(k+1, l+2, "@");
-		 } else if (d->data[a][c]==3) {
+		 } else if (vettore[a][c]==3) {
 			 attron(COLOR_PAIR(3));
 			 for (int i=k; i<k+3; i++) {
 				 for (int j=l; j<l+5; j++) {
@@ -395,7 +400,7 @@ void printBlackBoard(struct board * b) {
 				 }
 			 }
 			 mvprintw(k+1, l+2, "O");
-		 } else if (d->data[a][c]==4) {
+		 } else if (vettore[a][c]==4) {
 			 attron(COLOR_PAIR(3));
 			 for (int i=k; i<k+3; i++) {
 				 for (int j=l; j<l+5; j++) {

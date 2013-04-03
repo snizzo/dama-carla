@@ -150,7 +150,11 @@ int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 			
 			clear();
 			refresh();
-			printAfterMove(&b);
+			if (color==1) {
+				printWhiteBoard(&b);
+			} else {
+				printBlackBoard;
+			}
 			
 			free(move->daC);
 			free(move->aC);

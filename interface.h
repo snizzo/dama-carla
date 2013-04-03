@@ -7,6 +7,7 @@
 #include <stdlib.h>
 
 #include "auth.h"
+#include "logic.h"
 
 void setInterface(void);
 struct logininfo * showLoginForm(void);
@@ -16,6 +17,7 @@ int showMainMenu(void);
 void allBlack(void);
 int even(int n);
 struct moveinfo * takeMove(struct board * b);
-void printAfterMove(struct board * b);
+void printWhiteBoard(struct board * b);
+void printBlackBoard(struct board * b);
 
 #endif

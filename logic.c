@@ -382,7 +382,7 @@ int nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scont
 		l = 7;
 	}
 																				//arrivo appartengano alla board
-	if (m==1) {																//gioca il bianco
+	if (m==1) {																	//gioca il bianco
 		if ((b->data[i][j]==1 || b->data[i][j]==2) && b->data[k][l]==0) {
 			int c = 0;
 			for (int d=0;d<8;d++){
@@ -400,20 +400,23 @@ int nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scont
 				}
 			}
 			if (c>0) {
-				capture(b, i, j, k, l);										//la riga successiva è la mangiata multipla
-				return 1;
-					//serve un nuovo input del giocatore che decide in che casella andare per mangiare,
-					//a quel punto si richiama capture(b, k, l, (input del giocatore), (input del giocatore))
-				
+				if (capture(b, i, j, k, l)==1) {
+					return 1;
+				} else {
+					return -1;
+				}
 			} else {
-				movement(b, i, j, k, l);
-				return 1;
+				if (movement(b, i, j, k, l)==1) {
+					return 1;
+				} else {
+					return -1;
+				}
 			}
 		} else {
 			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
 			return -1;
 		}
-	} else {																//gioca il nero
+	} else {																	//gioca il nero
 		if ((b->data[i][j]==3 || b->data[i][j]==4) && b->data[k][l]==0) {
 			int c = 0;
 			for (int d=0;d<8;d++){
@@ -431,18 +434,23 @@ int nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scont
 				}
 			}
 			if (c>0) {
-				capture(b, i, j, k, l);
-				return 1;
+				if (capture(b, i, j, k, l)==1) {
+					return 1;
+				} else {
+					return -1;
+				}
 			} else {
-				movement(b, i, j, k, l);
-				return 1;
+				if (movement(b, i, j, k, l)==1) {
+					return 1;
+				} else {
+					return -1;
+				}
 			}
 		} else {
 			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
 			return -1;
 		}
 	}
-	
 }
 
 int movement( struct board * b, int i, int j, int k, int l)
@@ -484,7 +492,7 @@ int movement( struct board * b, int i, int j, int k, int l)
 			return -1;
 		}
 	}
-	return 1;
+	return -1;
 }
 
 /*
@@ -534,7 +542,7 @@ int capture( struct board *b, int i, int j, int k, int l)
 			return -1;
 		}
 	}
-	return 1;
+	return -1;
 }
 		
 

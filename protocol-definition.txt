@@ -28,6 +28,7 @@ RESPONSE:	accepted
 
 COMMAND:	opponent <> <> <gameid> <loginkey>
 RESPONSE:	thinking
+			moved <from> <to>
 			yourmove
 			gamewon
 			gamelost

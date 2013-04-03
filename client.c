@@ -10,54 +10,11 @@
 int main(int argc, char * argv[])
 {	
 	
+	//prepare ncurses interface
 	setInterface();
-	void allBlack();
 	
-	struct board b;
-	
-	setAllBoardEmpty(&b);
-	prepareBoard(&b);
-	
-	while(true){
-		//bianca
-		struct moveinfo * move = takeMove(&b);
-		
-		if(nextMove( &b, move, 1)==-1){
-			singleWindowMessage("Mossa illegale!");
-			sleep(1);
-		}
-		
-		clear();
-		refresh();
-		printAfterMove(&b);
-		
-		free(move->daC);
-		free(move->aC);
-		free(move->daL);
-		free(move->aL);
-		
-		//nera
-		struct moveinfo * moveblack = takeMove(&b);
-		
-		if(nextMove( &b, moveblack, 2)==-1){
-			singleWindowMessage("Mossa illegale!");
-			sleep(1);
-		}
-		
-		clear();
-		refresh();
-		printAfterMove(&b);
-		
-		free(moveblack->daC);
-		free(moveblack->aC);
-		free(moveblack->daL);
-		free(moveblack->aL);
-	}
-	
-//	printf ("%s - %s - %s - %s", move->daC, move->daL, move->aC, move->aL);
-		
-	
-	/*
+	//set everything to use black/white, in case terminal colors are different
+	allBlack();
 	
 	//evaluating additional parameters
 	evaluateParams(argc,argv);
@@ -134,18 +91,85 @@ int main(int argc, char * argv[])
 				singleWindowMessage("Waiting for player...");
 				char * gameid = joinGame(&net, me);
 				singleWindowMessage("Game Found!");
-				sleep(4);
+				sleep(1);
+				
+				int result = playGame(&net, gameid, me);
+				if(result){
+					singleWindowMessage("Game Won!");
+				} else {
+					singleWindowMessage("Game Lost!");
+				}
+				
 				break;
 		}
 		break;
 		
 	}
-	*/
+	
 	unsetInterface(); //unset ncurses
 	
 	return 0;
   
 }
+
+int playGame(struct client_network * net, char * gameid, struct clientuser * me)
+{
+	int color = 0;
+	
+	fullClientCommand(net, "opponent","","",gameid,me->loginkey);
+	struct netmessage * incoming = readClientMessage(net);
+	if(areEqual(incoming->msg1, "thinking")){
+		color = 2;
+	} else if(areEqual(incoming->msg1, "yourmove")){
+		color = 1;
+	}
+	
+	//preparing board
+	struct board b;
+	setAllBoardEmpty(&b);
+	prepareBoard(&b);
+	
+	while(1){
+		//retrieving server game status
+		fullClientCommand(net, "opponent","","",gameid,me->loginkey);
+		incoming = readClientMessage(net);
+		
+		//l'avversario sta pensando
+		if(areEqual(incoming->msg1, "thinking")){
+			sleep(2);
+			continue;
+			
+		//tocca a te, fai la mossa
+		} else if (areEqual(incoming->msg1, "yourmove")) {
+			struct moveinfo * move = takeMove(&b);
+			
+			while(nextMove( &b, move, color)==-1){
+				singleWindowMessage("Mossa illegale!");
+				sleep(1);
+			}
+			
+			clear();
+			refresh();
+			printAfterMove(&b);
+			
+			free(move->daC);
+			free(move->aC);
+			free(move->daL);
+			free(move->aL);
+			free(move);
+		
+		//partita vinta
+		} else if (areEqual(incoming->msg1, "gamewon")) {
+			return 1;
+		
+		//partita persa
+		} else if (areEqual(incoming->msg1, "gamelost")) {
+			return 0;
+		}
+		
+	}
+}
+
 /*
  * Wait for a game and connect.
  */
@@ -200,207 +224,4 @@ void evaluateParams(int argc, char * argv[])
 			exit(0);
 		}
 	}
-}
-
-//various utils
-int even(int n) {
-	if ((n % 2)==0) {
-		return 1;
-	} else {
-		return 0;
-	}
-}
-
- 
-struct moveinfo * takeMove(struct board * b)
-{
-	FIELD * field[5];
-	FORM  * my_form;
-	int ch;
-	
-	/* Initialize the fields */
-	field[0] = new_field(1, 1, 3, 52, 0, 0);
-	field[1] = new_field(1, 1, 3, 54, 0, 0);
-	field[2] = new_field(1, 1, 5, 52, 0, 0);
-	field[3] = new_field(1, 1, 5, 54, 0, 0);
-	field[4] = NULL;
-	
-	/* Set field options */
-	set_field_back(field[0], A_UNDERLINE); 	/* Print a line for the option 	*/
-	field_opts_off(field[0], O_AUTOSKIP);  	/* Don't go to next field when this */
-						/* Field is filled up 		*/
-	set_field_back(field[1], A_UNDERLINE); 
-	field_opts_off(field[1], O_AUTOSKIP);
-	
-	set_field_back(field[2], A_UNDERLINE); 
-	field_opts_off(field[2], O_AUTOSKIP);
-	
-	set_field_back(field[3], A_UNDERLINE); 
-	field_opts_off(field[3], O_AUTOSKIP);
-
-	/* Create the form and post it */
-	my_form = new_form(field);
-	post_form(my_form);
-	refresh();
-	
-	printAfterMove(b);
-			 
-	init_pair(4,COLOR_WHITE,COLOR_BLACK);
-	attron(COLOR_PAIR(4));
- 
-	mvprintw(1, 49, "Inserisci la tua prossima mossa");
-	mvprintw(3, 49, "da:");
-	mvprintw(5, 49, "a:");
-	refresh();
-	
-	int exitCond = 0;
-	
-	/* Loop through to get user requests */
-	while(!exitCond)
-	{	
-		ch = getch();
-		
-		switch(ch)
-		{	
-			case '\n':
-				exitCond = 1;
-				break;
-			
-			case KEY_BACKSPACE:
-				/* if backspace is hit, a char disappear*/
-				form_driver(my_form, REQ_DEL_PREV);
-				break;
-			
-			case KEY_DOWN:
-				/* Go to next field */
-				form_driver(my_form, REQ_NEXT_FIELD);
-				/* Go to the end of the present buffer */
-				/* Leaves nicely at the last character */
-				form_driver(my_form, REQ_END_LINE);
-				break;
-			case KEY_UP:
-				/* Go to previous field */
-				form_driver(my_form, REQ_PREV_FIELD);
-				form_driver(my_form, REQ_END_LINE);
-				break;
-			default:
-				/* If this is a normal character, it gets */
-				/* Printed				  */	
-				form_driver(my_form, ch);
-				break;
-		}
-	}
-	
-	/* in any case, this small fix is needed in order to get data */
-	form_driver(my_form, REQ_PREV_FIELD);
-	form_driver(my_form, REQ_END_LINE);
-	
-	char * daC = field_buffer(field[0],0);
-	char * daL = field_buffer(field[1],0);
-	char * aC = field_buffer(field[2],0);
-	char * aL = field_buffer(field[3],0);
-	
-	struct moveinfo * data = malloc(sizeof(struct moveinfo));
-	
-	data->daC = copystring(daC);
-	data->daL = copystring(daL);
-	data->aC = copystring(aC);
-	data->aL = copystring(aL);
-					
-	
-	/* Un post form and free the memory */
-	unpost_form(my_form);
-	free_form(my_form);
-	free_field(field[0]);
-	free_field(field[1]);
-	free_field(field[2]);
-	free_field(field[3]);
-/*
-	printf("  ");     //deubg
-	printf("%d", i);
-	printf("%d", + j);
-	printf("%d", + k);
-	printf("%d", + l);
-*/
-	
-	return data;
-}
-
-void printAfterMove(struct board * b) {
-	init_pair(4,COLOR_WHITE,COLOR_BLACK);
-	attron(COLOR_PAIR(4));
-	mvprintw(1, 42, "8"); 
-	mvprintw(4, 42, "7"); 
-	mvprintw(7, 42, "6"); 
-	mvprintw(10, 42, "5"); 
-	mvprintw(13, 42, "4"); 
-	mvprintw(16, 42, "3"); 
-	mvprintw(19, 42, "2"); 
-	mvprintw(22, 42, "1"); 
-	mvprintw(25, 2, "a"); 
-	mvprintw(25, 7, "b"); 
-	mvprintw(25, 12, "c"); 
-	mvprintw(25, 17, "d"); 
-	mvprintw(25, 22, "e"); 
-	mvprintw(25, 27, "f"); 
-	mvprintw(25, 32, "g"); 
-	mvprintw(25, 37, "h"); 
-
-	init_pair(1,COLOR_WHITE,COLOR_WHITE);
-	init_pair(2,COLOR_WHITE,COLOR_BLACK);
-	init_pair(3,COLOR_MAGENTA,COLOR_BLACK);
-	for (int a=0; a<8; a++) {
-		for (int c=0; c<8; c++) {
-		 int k=a*3;
-		 int l=c*5;
-		 if (b->data[a][c]==1) {
-			 attron(COLOR_PAIR(2));
-			 for (int i=k; i<k+3; i++) {
-				 for (int j=l; j<l+5; j++) {
-					 mvprintw(i, j, " ");
-				 }
-			 }
-			 mvprintw(k+1, l+2, "O");
-		 } else if (b->data[a][c]==2) {
-			 attron(COLOR_PAIR(2));
-			 for (int i=k; i<k+3; i++) {
-				 for (int j=l; j<l+5; j++) {
-					 mvprintw(i, j, " ");
-				 }
-			 }
-			 mvprintw(k+1, l+2, "@");
-		 } else if (b->data[a][c]==3) {
-			 attron(COLOR_PAIR(3));
-			 for (int i=k; i<k+3; i++) {
-				 for (int j=l; j<l+5; j++) {
-					 mvprintw(i, j, " ");
-				 }
-			 }
-			 mvprintw(k+1, l+2, "O");
-		 } else if (b->data[a][c]==4) {
-			 attron(COLOR_PAIR(3));
-			 for (int i=k; i<k+3; i++) {
-				 for (int j=l; j<l+5; j++) {
-					 mvprintw(i, j, " ");
-				 }
-			 }
-			 mvprintw(k+1, l+2, "@");
-		 } else if (even(a+c)) {
-			 attron(COLOR_PAIR(1));
-			 for (int i=k; i<k+3; i++) {
-				 for (int j=l; j<l+5; j++) {
-					 mvprintw(i, j, " ");
-				 }
-			 }
-		 } else {
-			 attron(COLOR_PAIR(2));
-			 for (int i=k; i<k+3; i++) {
-				 for (int j=l; j<l+5; j++) {
-					 mvprintw(i, j, " ");
-				 }
-			 }
-		 }
-	 }
- }
- refresh();
 }

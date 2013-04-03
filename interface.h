@@ -14,5 +14,8 @@ void unsetInterface(void);
 void singleWindowMessage(char * message);
 int showMainMenu(void);
 void allBlack(void);
+int even(int n);
+struct moveinfo * takeMove(struct board * b);
+void printAfterMove(struct board * b);
 
 #endif

@@ -11,8 +11,7 @@
 #include "structs.h"
 
 void evaluateParams(int argc, char * argv[]);
-int even(int n);
-struct moveinfo * takeMove(struct board * b);
 char * joinGame(struct client_network * net, struct clientuser * me);
+int playGame(struct client_network * net, char * gameid, struct clientuser * me);
 
 #endif

@@ -14,6 +14,7 @@ struct game {
 	char * key;
 	char * white;
 	char * black;
+	int status;
 };
 
 struct board{

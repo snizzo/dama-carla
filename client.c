@@ -9,7 +9,6 @@
 
 int main(int argc, char * argv[])
 {	
-	
 	//prepare ncurses interface
 	setInterface();
 	
@@ -21,6 +20,14 @@ int main(int argc, char * argv[])
 	
 	//initializing client network
 	struct client_network net;
+	
+	if(argc>1){
+		net.target_ip = argv[1];
+	} else {
+		char * ip = malloc(11);
+		ip = "127.0.0.1";
+		net.target_ip = ip;
+	}
 	
 	//creating the user structure that will take record of the user info and current state
 	struct clientuser * me = malloc(sizeof(struct clientuser));
@@ -275,6 +282,7 @@ void evaluateParams(int argc, char * argv[])
 		printf("register <nickname> <password> :\n");
 		printf("Register a new account on server with given <nickname> and <password>\n");
 		exit(0);
+		
 	} else if ((argc>=4) && (areEqual("register", argv[1]))){
 		//initializing client network
 		struct client_network net;

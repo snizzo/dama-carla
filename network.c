@@ -89,7 +89,7 @@ void openClientNetwork(struct client_network * net) {
  
 	memset(&net->dest, 0, sizeof(net->dest));                /* zero the struct */
 	net->dest.sin_family = AF_INET;
-	net->dest.sin_addr.s_addr = inet_addr(TARGET_IP); /* set destination IP number */
+	net->dest.sin_addr.s_addr = inet_addr(net->target_ip); /* set destination IP number */
 	net->dest.sin_port = htons(PORTNUM);                /* set destination port number */
  
 	connect(net->mysocket, (struct sockaddr *)&net->dest, sizeof(struct sockaddr));

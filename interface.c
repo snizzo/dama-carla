@@ -366,7 +366,7 @@ void printBlackBoard(struct board * b) {
 	mvprintw(13, 42, "5"); 
 	mvprintw(16, 42, "6"); 
 	mvprintw(19, 42, "7"); 
-	mvprintw(22, 42, "7"); 
+	mvprintw(22, 42, "8"); 
 	mvprintw(25, 2, "h"); 
 	mvprintw(25, 7, "g"); 
 	mvprintw(25, 12, "f"); 

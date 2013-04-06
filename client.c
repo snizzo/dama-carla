@@ -177,7 +177,19 @@ int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 				singleWindowMessage("failed to retrieve opponent move!!");
 			}
 			
-			struct moveinfo * move = takeMove(&b, color);
+			struct moveinfo * move;
+			
+			int exitCond2 = -1;
+			
+			//force player to give a correct input
+			while(exitCond2==-1){
+				move = takeMove(&b, color);
+				exitCond2 = nextMove( &b, move, color);
+				if(exitCond2==-1){
+					singleWindowMessage("Mossa illegale!");
+					sleep(1);
+				}
+			}
 			
 			char m[5];
 			m[0] = move->daC[0];
@@ -188,17 +200,6 @@ int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 			
 			fullClientCommand(net, "move",m,"",gameid,me->loginkey);
 			incoming = readClientMessage(net);
-			
-			int exitCond2 = 0;
-			
-			while(!exitCond2){
-				if(nextMove( &b, move, color)==-1){
-					singleWindowMessage("Mossa illegale!");
-					sleep(1);
-				} else {
-					exitCond2 = 1;
-				}
-			}
 			
 			clear();
 			refresh();

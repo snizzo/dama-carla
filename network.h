@@ -22,6 +22,7 @@ struct server_network{
 
 
 struct client_network{
+	char * target_ip;
 	struct sockaddr_in dest;
 	int mysocket;
 	char buffer[300]; /* +1 so we can add null terminator */

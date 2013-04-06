@@ -150,7 +150,7 @@ int even(int n) {
 }
 
 
-struct moveinfo * takeMove(struct board * b)
+struct moveinfo * takeMove(struct board * b, int color)
 {
 	FIELD * field[5];
 	FORM  * my_form;
@@ -181,7 +181,14 @@ struct moveinfo * takeMove(struct board * b)
 	post_form(my_form);
 	refresh();
 	
-	printWhiteBoard(b);
+	switch(color){
+		case 1:
+			printWhiteBoard(b);
+			break;
+		case 2:
+			printBlackBoard(b);
+			break;
+	}
 			 
 	init_pair(4,COLOR_WHITE,COLOR_BLACK);
 	attron(COLOR_PAIR(4));

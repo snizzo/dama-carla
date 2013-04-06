@@ -177,7 +177,7 @@ int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 				singleWindowMessage("failed to retrieve opponent move!!");
 			}
 			
-			struct moveinfo * move = takeMove(&b);
+			struct moveinfo * move = takeMove(&b, color);
 			
 			char m[5];
 			m[0] = move->daC[0];

@@ -15,7 +15,7 @@ void singleWindowMessage(char * message);
 int showMainMenu(void);
 void allBlack(void);
 int even(int n);
-struct moveinfo * takeMove(struct board * b);
+struct moveinfo * takeMove(struct board * b, int color);
 void printWhiteBoard(struct board * b);
 void printBlackBoard(struct board * b);
 

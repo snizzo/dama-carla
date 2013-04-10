@@ -101,10 +101,12 @@ int main(int argc, char * argv[])
 				sleep(1);
 				
 				int result = playGame(&net, gameid, me);
-				if(result){
+				if(result==1){
 					singleWindowMessage("Game Won!");
-				} else {
+					sleep(4);
+				} else if (result==-1) {
 					singleWindowMessage("Game Lost!");
+					sleep(4);
 				}
 				
 				break;
@@ -151,6 +153,12 @@ int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 			sleep(2);
 			continue;
 			
+			
+		} else if (canMove(&b, color)==-1) {
+			return -1;
+		} else if (canMove(&b, opp)==-1) {
+			return 1;
+
 		//tocca a te, fai la mossa
 		} else if (areEqual(incoming->msg1, "yourmove")) {
 			//perfoming locally opponent move
@@ -221,16 +229,7 @@ int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 			free(move->daL);
 			free(move->aL);
 			free(move);
-		
-		//partita vinta
-		} else if (areEqual(incoming->msg1, "gamewon")) {
-			return 1;
-		
-		//partita persa
-		} else if (areEqual(incoming->msg1, "gamelost")) {
-			return 0;
 		}
-		
 	}
 }
 

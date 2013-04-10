@@ -22,7 +22,7 @@ void prepareBoard( struct board * b )
 	b->data[2][5] = 3;
 	b->data[2][3] = 3;
 	b->data[2][1] = 3;
-	
+/*	
 	b->data[7][6] = 1;
 	b->data[7][4] = 1;
 	b->data[7][2] = 1;
@@ -37,13 +37,14 @@ void prepareBoard( struct board * b )
 	b->data[6][5] = 1;
 	b->data[6][3] = 1;
 	b->data[6][1] = 1;
-
+	*/
+	b->data[4][5] = 1;
 }
 
 /*
  * se un giocatore al suo turno non può muovere niente, perde: se c>0 può muovere, se c=0 partita persa per il giocatore di turno
  */
-int canMove ( struct board * b, int m)
+int canMove ( struct board * b, int m )
 {
 	int c = 0;													//orribile contatore che conta se c'è almeno una mossa che il
 	if (m==1) {													//giocatore può fare

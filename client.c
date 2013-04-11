@@ -177,7 +177,11 @@ int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 				}
 				clear();
 				refresh();
-				if (color==1) {
+				if (canMove(&b, color)==-1) {
+					return -1;
+				} else if (canMove(&b, opp)==-1) {
+					return 1;
+				} else if (color==1) {
 					printWhiteBoard(&b);
 				} else {
 					printBlackBoard(&b);
@@ -218,7 +222,11 @@ int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 			
 			clear();
 			refresh();
-			if (color==1) {
+			if (canMove(&b, color)==-1) {
+				return -1;
+			} else if (canMove(&b, opp)==-1) {
+				return 1;
+			} else if (color==1) {
 				printWhiteBoard(&b);
 			} else {
 				printBlackBoard(&b);

@@ -14,12 +14,6 @@ struct game {
 	char * key;
 	char * white;
 	char * black;
-	/*
-	 * 1: white turn
-	 * 2: black turn
-	 * 3: white win
-	 * 4: black win
-	 */
 	char * lastmove;
 	int status;
 };

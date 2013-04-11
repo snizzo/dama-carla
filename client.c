@@ -12,9 +12,6 @@ int main(int argc, char * argv[])
 	//prepare ncurses interface
 	setInterface();
 	
-	//set everything to use black/white, in case terminal colors are different
-	//allBlack();
-	
 	//evaluating additional parameters
 	evaluateParams(argc,argv);
 	

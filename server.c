@@ -67,7 +67,6 @@ int main(int argc, char * argv[])
 			
 			
 			if(logged!=NULL){
-				//TODO: check if logged is already in a game
 				struct game * found = getGameFromPlayer(games, logged->key);
 				if(found!=NULL){
 					if(found->status==1 && areEqual(found->white, logged->key)){
@@ -112,7 +111,6 @@ int main(int argc, char * argv[])
 			
 			
 			if(logged!=NULL){
-				//TODO: check if logged is already in a game
 				struct game * found = getGameFromPlayer(games, logged->key);
 				if(found!=NULL){
 					
@@ -143,7 +141,6 @@ int main(int argc, char * argv[])
 			
 			
 			if(logged!=NULL){
-				//TODO: check if logged is already in a game
 				struct game * found = getGameFromPlayer(games, logged->key);
 				if(found!=NULL){
 					fullCommand(&net, "ready", found->key, "", "", "");
@@ -190,7 +187,7 @@ int main(int argc, char * argv[])
 				
 				if (areEqual(password, message->msg3)){
 					//generating temporary login key (30 chars long) to be sent to the client
-					char * key = generateLoginId(); //WARNING: key DOESN'T GET FREED! CURRENTLY MEMLEAKING! 
+					char * key = generateLoginId();
 					
 					char * nick = copystring(message->msg2);
 					struct user * u = createUser(0,0,"",key,nick,password);

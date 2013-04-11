@@ -15,9 +15,9 @@
 struct server_network{
 	struct sockaddr_in dest;         /* socket info about the machine connecting to us */
 	struct sockaddr_in serv;         /* socket info about our server */
-	int mysocket, incoming;    /* socket used to listen for incoming connections */
-	socklen_t socksize;              /*  = sizeof(struct sockaddr_in) */
-	char buffer[300];                /* buffer for incoming messages */
+	int mysocket, incoming;  		  /* socket used to listen for incoming connections */
+	socklen_t socksize;               /*  = sizeof(struct sockaddr_in) */
+	char buffer[300];				  /* buffer for incoming messages */
 };
 
 

@@ -104,8 +104,6 @@ struct user * getUserFromKeyEngine(char * key, struct lnode * n)
 		}
 	} else {
 		return NULL;
-		//empty node: critical errors!!
-		//FIXME: maybe automatic whiping...
 	}
 
 }
@@ -180,8 +178,6 @@ struct game * getGameFromPlayerEngine(char * key, struct lnode * n)
 		}
 	} else {
 		return NULL;
-		//empty node: critical errors!!
-		//FIXME: maybe automatic whiping...
 	}
 
 }
@@ -210,8 +206,6 @@ struct game * getGameFromKeyEngine(char * key, struct lnode * n)
 		}
 	} else {
 		return NULL;
-		//empty node: critical errors!!
-		//FIXME: maybe automatic whiping...
 	}
 
 }

@@ -22,7 +22,7 @@ void prepareBoard( struct board * b )
 	b->data[2][5] = 3;
 	b->data[2][3] = 3;
 	b->data[2][1] = 3;
-/*	
+
 	b->data[7][6] = 1;
 	b->data[7][4] = 1;
 	b->data[7][2] = 1;
@@ -37,8 +37,6 @@ void prepareBoard( struct board * b )
 	b->data[6][5] = 1;
 	b->data[6][3] = 1;
 	b->data[6][1] = 1;
-	*/
-	b->data[4][5] = 1;
 }
 
 /*

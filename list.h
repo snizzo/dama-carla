@@ -4,13 +4,6 @@
 #include <stdlib.h>
 #include "structs.h"
 
-/*
-#define llist(t) struct lnode_t { \
-	t * value; \
-	lnode_t * next; \
-};
-*/
-
 struct llist * createList(void);
 void appendUserNode(struct llist * l, struct user * u1);
 struct lnode * getLastNode(struct llist * l, struct lnode * n);

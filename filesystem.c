@@ -2,8 +2,6 @@
 #include "filesystem.h"
 
 /*
- * MEMLEAK RISK
- * 
  * This function returns a heap allocated string which is the result
  * from the concatenation of str1 and str2
  */
@@ -20,9 +18,7 @@ char * buildFilePath(char * str1, char * str2)
 	return destination;
 }
 
-/* 
- * MEMLEAK RISK
- * 
+/*
  * This function returns a pointer to a heap allocated struct token.
  * You don't have to allocate it previously but
  * you MUST free() it after use, in order to avoid memleak problems.

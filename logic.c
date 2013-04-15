@@ -40,12 +40,12 @@ void prepareBoard( struct board * b )
 }
 
 /*
- * se un giocatore al suo turno non può muovere niente, perde: se c>0 può muovere, se c=0 partita persa per il giocatore di turno
+ * canMove: -1=game lost
  */
 int canMove ( struct board * b, int m )
 {
-	int c = 0;													//orribile contatore che conta se c'è almeno una mossa che il
-	if (m==1) {													//giocatore può fare
+	int c = 0;
+	if (m==1) {
 		c=0;
 		for (int d=0;d<8;d++){
 			for (int e=0;e<8;e++){
@@ -79,15 +79,13 @@ int canMove ( struct board * b, int m )
 		}
 	}
 	if (c==0) {
-		printf ("perso\n");
 		return -1;
 		} else {
-			printf ("ci sono mosse\n");
 			return 1;
 			}
 }
 
-int canWhiteMove( struct board * b, int i, int j )				//può la pedina bianca muovere?
+int canWhiteMove( struct board * b, int i, int j )							//can white checker move?
 {
 	if (j==0) {
 		if (b->data[i-1][j+1]==0) {
@@ -105,7 +103,7 @@ int canWhiteMove( struct board * b, int i, int j )				//può la pedina bianca mu
 	return -1;
 }
 
-int canWhiteCapt( struct board * b, int j, int k, int l)						//può la pedina bianca mangiare?
+int canWhiteCapt( struct board * b, int j, int k, int l)						//can white checker capture?
 {
 	if (notCapturable(k, l)==1) {
 		return -1;
@@ -125,7 +123,7 @@ int canWhiteCapt( struct board * b, int j, int k, int l)						//può la pedina b
 	return -1;
 }
 
-int canBlackMove( struct board * b, int i, int j )				//può la pedina nera muovere?
+int canBlackMove( struct board * b, int i, int j )							//can black checker move?
 {
 	if (j==0) {
 		if (b->data[i+1][j+1]==0) {
@@ -143,7 +141,7 @@ int canBlackMove( struct board * b, int i, int j )				//può la pedina nera muov
 	return -1;
 }
 
-int canBlackCapt( struct board * b, int j, int k, int l)						//può la pedina nera mangiare?
+int canBlackCapt( struct board * b, int j, int k, int l)						//can black checker capture?
 {
 	if (notCapturable(k, l)==1) {
 		return -1;
@@ -163,7 +161,7 @@ int canBlackCapt( struct board * b, int j, int k, int l)						//può la pedina n
 	return -1;
 }
 
-int canWkingMove( struct board * b, int i, int j )				//può la dama bianca muovere?
+int canWkingMove( struct board * b, int i, int j )							//can white king move?
 {
 	if (i==0 && j==7) {
 		if (b->data[i+1][j-1]==0) {
@@ -197,7 +195,7 @@ int canWkingMove( struct board * b, int i, int j )				//può la dama bianca muov
 	return -1;
 }
 
-int canWkingCapt( struct board * b, int i, int j, int k, int l)				//può la dama bianca mangiare?
+int canWkingCapt( struct board * b, int i, int j, int k, int l)				//can white king capture?
 {
 	if (notCapturable(k, l)==1) {
 		return -1;
@@ -233,7 +231,7 @@ int canWkingCapt( struct board * b, int i, int j, int k, int l)				//può la dam
 	return -1;
 }
 
-int canBkingMove( struct board * b, int i, int j )				//può la dama nera muovere?
+int canBkingMove( struct board * b, int i, int j )							//can black king move?
 {
 	if (i==0 && j==7) {
 		if (b->data[i+1][j-1]==0) {
@@ -267,7 +265,7 @@ int canBkingMove( struct board * b, int i, int j )				//può la dama nera muover
 	return -1;
 }
 
-int canBkingCapt( struct board * b, int i, int j, int k, int l)				//può la dama nera mangiare?
+int canBkingCapt( struct board * b, int i, int j, int k, int l)				//can black king capture?
 {
 	if (notCapturable(k, l)==1) {
 		return -1;
@@ -305,17 +303,9 @@ int canBkingCapt( struct board * b, int i, int j, int k, int l)				//può la dam
 
 
 /*
- * i,j=coordinate pedina/dama da spostare; k,l=coordinate "arrivo"; m= 1 bianco 2 nero
- * prima di nextMove bisogna far chiamare al programma canMove, se canMove dà -1 la partita è finita e nextMove non parte
- * promemoria: capture controlla se una delle pedine che possono mangiare è quella selezionata dal giocatore. se lo è
- * e il giocatore ha selezionato la giusta casella per mangiare, modifica la board e il turno finisce, se una delle due
- * condizioni non è soddisfatta dice "devi mangiare per forza, rifai la mossa"; move funzionerà in modo simile
- * 
- * torna 1 se tutto bene,
- * torna -1 se sbagliato
- * 
+ * nextMove:	1=move done		-1=move not done
  */
-int nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scontato che la casella di partenza e quella di
+int nextMove( struct board * b, struct moveinfo * move, int m )
 {
 	
 	int i = 8 - atoi(move->daL);
@@ -357,8 +347,8 @@ int nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scont
 	} else if (areEqual(move->aC, "h")) {
 		l = 7;
 	}
-																				//arrivo appartengano alla board
-	if (m==1) {																	//gioca il bianco
+
+	if (m==1) {																	//white player plays
 		if ((b->data[i][j]==1 || b->data[i][j]==2) && b->data[k][l]==0) {
 			int c = 0;
 			for (int d=0;d<8;d++){
@@ -389,10 +379,9 @@ int nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scont
 				}
 			}
 		} else {
-			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
 			return -1;
 		}
-	} else {																	//gioca il nero
+	} else {																	//black player plays
 		if ((b->data[i][j]==3 || b->data[i][j]==4) && b->data[k][l]==0) {
 			int c = 0;
 			for (int d=0;d<8;d++){
@@ -423,7 +412,6 @@ int nextMove( struct board * b, struct moveinfo * move, int m )		//dà per scont
 				}
 			}
 		} else {
-			printf ("quella non è una tua pedina/dama oppure la casella di destinazione non è libera\n");
 			return -1;
 		}
 	}
@@ -437,7 +425,6 @@ int movement( struct board * b, int i, int j, int k, int l)
 			changeBoard(b, k, l, 1);
 			return 1;
 		} else {
-			printf ("mossa non consentita\n");
 			return -1;
 		}
 	} else if (b->data[i][j]==2) {
@@ -446,7 +433,6 @@ int movement( struct board * b, int i, int j, int k, int l)
 		    changeBoard(b, k, l, 2);
 		    return 1;
 		} else {
-			printf ("mossa non consentita\n");
 			return -1;
 		}
 	} else if (b->data[i][j]==3) {
@@ -455,7 +441,6 @@ int movement( struct board * b, int i, int j, int k, int l)
 			changeBoard(b, k, l, 3);
 			return 1;
 		} else {
-			printf ("mossa non consentita\n");
 			return -1;
 		}
 	} else if (b->data[i][j]==4) {
@@ -464,17 +449,12 @@ int movement( struct board * b, int i, int j, int k, int l)
 		    changeBoard(b, k, l, 4);
 		    return 1;
 		} else {
-			printf ("mossa non consentita\n");
 			return -1;
 		}
 	}
 	return -1;
 }
 
-/*
- * se il capture va a buon fine, si dovrebbe verificare se la pedina che ha appena mangiato è ancora in grado di mangiare,
- * in quel caso bisogna farglielo fare però il giocatore dovrebbe decidere quale mangiare se può mangiarne più di una
- */
 int capture( struct board *b, int i, int j, int k, int l)
 {
 	if (b->data[i][j]==1 && i==k+2 && (l==j-2 || l==j+2)) {
@@ -484,7 +464,6 @@ int capture( struct board *b, int i, int j, int k, int l)
 			changeBoard(b, k, l, 1);
 			return 1;
 		} else {
-			printf ("mossa non consentita\n");
 			return -1;
 		}
 	} else if (b->data[i][j]==2 && (i==k+2 || i==k-2) && (j==l-2 || j==l+2)) {
@@ -494,7 +473,6 @@ int capture( struct board *b, int i, int j, int k, int l)
 			changeBoard(b, k, l, 2);
 			return 1;
 		} else {
-			printf ("mossa non consentita\n");
 			return -1;
 		}
 	} else if (b->data[i][j]==3 && i==k-2 && (l==j-2 || l==j+2)) {
@@ -504,7 +482,6 @@ int capture( struct board *b, int i, int j, int k, int l)
 			changeBoard(b, k, l, 3);
 			return 1;
 		} else {
-			printf ("mossa non consentita\n");
 			return -1;
 		}
 	} else if (b->data[i][j]==4 && (i==k+2 || i==k-2) && (j==l-2 || j==l+2)) {
@@ -514,18 +491,12 @@ int capture( struct board *b, int i, int j, int k, int l)
 			changeBoard(b, k, l, 4);
 			return 1;
 		} else {
-			printf ("mossa non consentita\n");
 			return -1;
 		}
 	}
 	return -1;
 }
-		
 
-
-/*
- * i,j=coordinate da modificare. c=tipo di pedina
- */
 void changeBoard( struct board * b, int i, int j,int c)
 {
 	if (i==0 && c==1) {
@@ -545,22 +516,6 @@ int notCapturable (int k, int l) {
 	}
 }
 
-/*
- * Print internal data board.
- */
-void printBoard( struct board * b )
-{	 
-	for (int i=0;i<8;i++){
-		for (int j=0;j<8;j++){
-			printf ("%i ", b->data[i][j]);
-		}
-		printf ("\n");
-	}
-}
-
-/*
- * Set all the data to empty data 'e' 
- */
 void setAllBoardEmpty( struct board * b )
 {	
 	for (int i=0;i<8;i++){

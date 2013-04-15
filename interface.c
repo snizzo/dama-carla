@@ -130,7 +130,7 @@ int showMainMenu()
 		
 		switch(ch)
 		{	
-			case 'q': //logout
+			case 'q': 		//logout
 				return 0;
 			
 			case 'j':      //join a game
@@ -260,13 +260,6 @@ struct moveinfo * takeMove(struct board * b, int color)
 	free_field(field[1]);
 	free_field(field[2]);
 	free_field(field[3]);
-/*
-	printf("  ");     //deubg
-	printf("%d", i);
-	printf("%d", + j);
-	printf("%d", + k);
-	printf("%d", + l);
-*/
 	
 	return data;
 }

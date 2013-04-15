@@ -15,8 +15,6 @@
    
    and you will have all the message mapped to incoming netmessage. 
    
-   
-   
  */
 
 #include "network.h"

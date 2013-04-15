@@ -8,8 +8,10 @@
 #include "auth.h"
 #include "list.h"
 #include "logic.h"
+#include "structs.h"
 
 void evaluateParams(int argc, char * argv[]);
+char * fromCharToPChar(char p);
 
 int main(int argc, char * argv[])
 {	
@@ -118,15 +120,40 @@ int main(int argc, char * argv[])
 					printf("status: %i\n", found->status);
 					printf("move: %s\n", move);
 					free(found->lastmove);
-					found->lastmove = copystring(move);
 					
-					if(found->status==1){
-						found->status = 2;
-					} else if(found->status==2){
-						found->status = 1;
+					struct moveinfo * trymove = malloc(sizeof(struct moveinfo));
+				
+					trymove->daC = fromCharToPChar(message->msg2[0]);
+					trymove->daL = fromCharToPChar(message->msg2[1]);
+					trymove->aC = fromCharToPChar(message->msg2[2]);
+					trymove->aL = fromCharToPChar(message->msg2[3]);
+					
+					int color = 1;
+					
+					if(areEqual(logged->key, found->black)){
+						color = 2;
 					}
 					
-					fullCommand(&net, "accepted", "", "", "", "");
+					if(nextMove(found->currentboard, trymove, color)==1){
+						found->lastmove = copystring(move);
+						
+						if(found->status==1){
+							found->status = 2;
+						} else if(found->status==2){
+							found->status = 1;
+						}
+						
+						fullCommand(&net, "accepted", "", "", "", "");
+					} else {
+						fullCommand(&net, "rejected", "", "", "", "");
+					}
+					
+					free(trymove->aL);
+					free(trymove->aC);
+					free(trymove->daL);
+					free(trymove->daC);
+					free(trymove);
+					
 				} else {
 					fullCommand(&net, "gamenotfound", "", "", "", "");
 				}
@@ -219,6 +246,18 @@ int main(int argc, char * argv[])
 	closeServerNetwork(&net);
 	
 	return EXIT_SUCCESS;
+}
+
+/*
+ * Convert from char to char *
+ */
+char * fromCharToPChar(char p)
+{
+	char * s = malloc(2);
+	s[0] = p;
+	s[1] = 0;
+	
+	return s;
 }
 
 /*

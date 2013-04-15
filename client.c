@@ -196,26 +196,39 @@ int playGame(struct client_network * net, char * gameid, struct clientuser * me)
 			struct moveinfo * move;
 			
 			int exitCond2 = -1;
+			int exitCondServer = -1;
 			
 			//force player to give a correct input
-			while(exitCond2==-1){
-				move = takeMove(&b, color);
-				exitCond2 = nextMove( &b, move, color);
-				if(exitCond2==-1){
-					singleWindowMessage("Mossa illegale!");
+			while(exitCondServer==-1){
+				while(exitCond2==-1){
+					move = takeMove(&b, color);
+					exitCond2 = nextMove( &b, move, color);
+					if(exitCond2==-1){
+						singleWindowMessage("Mossa illegale!");
+						sleep(1);
+					}
+				}
+				
+				char m[5];
+				m[0] = move->daC[0];
+				m[1] = move->daL[0];
+				m[2] = move->aC[0];
+				m[3] = move->aL[0];
+				m[4] = 0; //string terminator
+				
+				fullClientCommand(net, "move",m,"",gameid,me->loginkey);
+				incoming = readClientMessage(net);
+				
+				if(areEqual(incoming->msg1, "accepted")){
+					singleWindowMessage("Moved!");
+					sleep(1);
+					exitCondServer = 1; //exiting...
+				} else {
+					singleWindowMessage("Move rejected from server");
+					exitCond2==-1;
 					sleep(1);
 				}
 			}
-			
-			char m[5];
-			m[0] = move->daC[0];
-			m[1] = move->daL[0];
-			m[2] = move->aC[0];
-			m[3] = move->aL[0];
-			m[4] = 0; //string terminator
-			
-			fullClientCommand(net, "move",m,"",gameid,me->loginkey);
-			incoming = readClientMessage(net);
 			
 			clear();
 			refresh();

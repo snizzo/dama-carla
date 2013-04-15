@@ -6,6 +6,7 @@
 #include "list.h"
 #include "network.h"
 #include "logic.h"
+#include "structs.h"
 
 struct llist * createList()
 {
@@ -137,6 +138,12 @@ void appendGameNode(struct llist * l, struct game * g1)
 	setAllBoardEmpty(g1->b); //everything 0
 	prepareBoard(g1->b); // preparing with right pieces
 	*/
+	struct board * currentboard = malloc(sizeof(struct board)*1); //used for server side validation
+	
+	setAllBoardEmpty(currentboard);
+	prepareBoard(currentboard);
+	
+	g1->currentboard = currentboard;
 	g1->lastmove = NULL;
 	//create node
 	struct lnode * node = malloc(sizeof(struct lnode)*1);

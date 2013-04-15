@@ -11,6 +11,7 @@ struct user {
 };
 
 struct game {
+	struct board * currentboard;
 	char * key;
 	char * white;
 	char * black;

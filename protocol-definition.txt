@@ -1,0 +1,34 @@
+COMMAND:    ping
+RESPONSE:   pong
+
+COMMAND:    login <username> <password>
+RESPONSE:   done <loginkey>
+			wrongpassword
+			usernotfound
+
+COMMAND:	register <username> <password>
+RESPONSE:	done
+			alreadythere
+
+COMMAND:	authping <> <> <> <loginkey>
+RESPONSE:	pong <username>
+			unauthorized
+
+COMMAND:	logout <> <> <> <loginkey>
+RESPONSE:	done
+			unauthorized
+
+COMMAND:	join <> <> <> <loginkey>
+RESPONSE:	wait
+			ready <gamekey>
+
+COMMAMD:	move <from> <to> <gameid> <loginkey>
+RESPONSE:	accepted
+			notvalid
+
+COMMAND:	opponent <> <> <gameid> <loginkey>
+RESPONSE:	thinking
+			yourmove <move>
+			yourmove
+			gamewon
+			gamelost
